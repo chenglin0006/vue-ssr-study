@@ -2,7 +2,7 @@
 <div class="corepage">
     {{initData.title}}---{{initData.name}}
     <page-title title="主页面2"></page-title>
-    <div class="router-btn" v-on:click="onRouterPage1BtnClick">路由页面1-3-1</div>
+    <div class="router-btn" v-on:click="onRouterPage1BtnClick">路由页面1-3-4</div>
     <div class="router-btn" v-on:click="onRouterPage2BtnClick">路由页面2</div>
     <div class="router-btn" v-on:click="onRouterPage3BtnClick">路由页面3</div>
 </div>

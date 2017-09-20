@@ -5,6 +5,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 使用vue-router
 Vue.use(VueRouter);
+const corepage = () => import('../container/corepage.vue')
 
 // 路由映射
 const routers = [{
