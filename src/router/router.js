@@ -5,7 +5,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 使用vue-router
 Vue.use(VueRouter);
-const corepage = () => import('../container/corepage.vue')
+const Invite = () => import('../inviteIndex/AppInvite.vue')
 
 // 路由映射
 const routers = [{
@@ -17,7 +17,7 @@ const routers = [{
     path: '/routerpage1',
     name: 'routerpage1',
     meta: {title: "路由页面1"},
-    component: require('../container/routerpage1.vue')
+    component: Invite
 }, {
     path: '/routerpage2',
     name: 'routerpage2',

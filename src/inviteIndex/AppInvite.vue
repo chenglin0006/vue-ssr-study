@@ -1,13 +1,15 @@
 <template>
-<div class="routerpage2">
-    123
+<div class="nestedrouter1">
+    <page-title title="邀约日历页面"></page-title>
 </div>
 </template>
 
 <script>
+import PageTitle from '../components/page-title.vue'
 export default {
-    name: 'routerpage2',
+    name: 'nestedrouter1',
     components: {
+        PageTitle
     },
     data() {
         return {
@@ -23,7 +25,7 @@ export default {
 </script>
 
 <style scoped lang="less" rel="stylesheet/less">
-.routerpage2{
+.nestedrouter1{
     
 }
 </style>
