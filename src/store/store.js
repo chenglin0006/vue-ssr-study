@@ -4,6 +4,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as type from './type'
+import fetchJsonp from 'fetch-jsonp';
 // 使用vuex
 Vue.use(Vuex);
 
@@ -14,7 +15,27 @@ let mutations = {
         state.ajaxData = payload;
     },
     setInitData(state,obj){
-        state.initData = obj
+        // state.initData = obj;
+        // return
+        let ajaxUrl = "http://e.51ping.com/lovelab/order/myPerformance";
+        fetchJsonp(ajaxUrl, {
+            jsonpCallback: 'jsonp'
+        })
+        .then(function(response) {
+            return response.json();
+        }).then((json) =>{
+            let objJson = {}
+            objJson.visitShopNum = json.content.visitShopNum||0;
+            objJson.allOrderTransAmount = json.content.allOrderTransAmount||0;
+            objJson.allOrderNum = json.content.allOrderNum||0;
+            objJson.inviteNum = json.content.inviteNum||0;
+            objJson.title=obj.title;
+            objJson.name = obj.name;
+            state.initData = objJson
+        }).catch(function(ex) {
+            state.initData = obj
+            console.log('ajaxGetData failed', ex);
+        });
     },
     [type.IS_BOSS](state,boolFlag){
 		state.isBoss = boolFlag;

@@ -60,7 +60,7 @@
             this.calendarLink = '/invite';
             this.hotelLink = '/hotel';
             this.ownLink = '/own';
-            this.getInviteNotDealNumFun();
+            // this.getInviteNotDealNumFun();
         },
         methods:{
             //获取待处理日历数目

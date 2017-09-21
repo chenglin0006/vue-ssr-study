@@ -1,10 +1,16 @@
 <template>
 <div class="corepage">
-    {{initData.title}}---{{initData.name}}
-    <page-title title="主页面2"></page-title>
-    <div class="router-btn" v-on:click="onRouterPage1BtnClick">路由页面1-3-4</div>
-    <div class="router-btn" v-on:click="onRouterPage2BtnClick">路由页面2</div>
-    <div class="router-btn" v-on:click="onRouterPage3BtnClick">路由页面3</div>
+    
+    <page-title title="主页面"></page-title>
+    <div>
+        测试数据：
+        <p>title:{{initData.title}}</p>
+        <p>name:{{initData.name}}</p>
+        <p>visitShopNum:{{initData.visitShopNum}}</p>
+        <p>allOrderTransAmount:{{initData.allOrderTransAmount}}</p>
+        <p>allOrderNum:{{initData.allOrderNum}}</p>
+        <p>inviteNum:{{initData.inviteNum}}</p>
+    </div>
 </div>
 </template>
 
@@ -28,15 +34,6 @@ export default {
     mounted() {
     },
     methods: {
-        onRouterPage1BtnClick(){
-            this.$router.push({ name: 'routerpage1'});
-        },
-        onRouterPage2BtnClick(){
-            this.$router.push({ name: 'routerpage2'});
-        },
-        onRouterPage3BtnClick(){
-            this.$router.push({ name: 'routerpage3'});
-        }
     },
     computed: {
         initData () {

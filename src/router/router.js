@@ -24,8 +24,8 @@ const HotelDetail = () => import('../hotelIndex/AppHotelDetail.vue')
 const routers = [{
     path: '/',
     name: 'corepage',
-    meta: {title: "主页面"},
-    component: require('../inviteIndex/AppInvite.vue')
+    meta: {title: "主页面",showBottom:true,tab:'invite'},
+    component: require('../container/corepage.vue')
 }, {
     path: '/routerpage1',
     name: 'routerpage1',
@@ -48,7 +48,6 @@ const routers = [{
     meta:{title:"酒店列表",showBottom:true,tab:'hotel'}
 }, {
     path: '/hotelDetail',
-    name: 'hotelDetail',
     component: HotelDetail,
     meta:{title:"酒店详情",showBottom:false},
     children:[

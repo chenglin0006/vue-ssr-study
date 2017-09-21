@@ -22,7 +22,7 @@ export function createApp() {
     const router = createRouter();
     router.afterEach(route=>{
         if(route.meta.title){
-            document.title = route.meta.title;
+            // document.title = route.meta.title;
             store.dispatch('setBottomStatus',route.meta.showBottom);
         }
         if(route.meta.tab){
