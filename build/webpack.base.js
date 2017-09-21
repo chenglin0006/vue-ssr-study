@@ -73,7 +73,7 @@ module.exports = {
             }, {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract(lessOption)
-            }, {
+            } ,{
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 use: [{
                     loader: 'url-loader',
