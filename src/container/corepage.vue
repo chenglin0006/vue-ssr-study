@@ -6,6 +6,7 @@
         测试数据：
         <p>title:{{initData.title}}</p>
         <p>name:{{initData.name}}</p>
+        <p v-if="initData.listLength">数组长度：{{initData.listLength}}</p>
         <p>visitShopNum:{{initData.visitShopNum}}</p>
         <p>allOrderTransAmount:{{initData.allOrderTransAmount}}</p>
         <p>allOrderNum:{{initData.allOrderNum}}</p>
@@ -18,7 +19,7 @@
 import PageTitle from '../components/page-title.vue'
 export default {
     asyncData ({ store, route}) {
-        return store.dispatch('setInitData', { title:'1233',name:'456' });
+        return store.dispatch('setInitData', { title:'1233',name:'456',listLength:'12' });
     },
     name: 'corepage',
     components: {
