@@ -77,8 +77,7 @@
                showAddVisitHistoryStatus:false,
                showSureCancelInviteStatus:false, //确认取消邀约弹窗
                showSurePayStatus:false, //确认收款弹窗
-               invitePayStatusMap:commonData.invitePayStatusMap,
-               isLLApp:false
+               invitePayStatusMap:commonData.invitePayStatusMap
             }
         },
         props:['item'],
@@ -103,7 +102,6 @@
             AppSurePop
         },
         mounted() {
-            this.isLLApp = CommonFun.getUaIsApp();
         },
         methods:{
             hideTypePop:function(){

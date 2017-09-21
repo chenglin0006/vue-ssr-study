@@ -48,7 +48,7 @@
 
 
 <script type="text/babel">
-import $ from 'zepto';
+import $ from 'jquery';
 
   export default {
 

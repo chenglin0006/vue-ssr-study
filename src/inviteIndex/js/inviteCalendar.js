@@ -1,4 +1,4 @@
-var $ = require('zepto');
+var $ = require('jquery');
 Date.prototype.format = function(format) //author: meizz 
 {
   var o = { 

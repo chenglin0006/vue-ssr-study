@@ -71,7 +71,7 @@
 <script>
     import formatter from 'date-formatter';
     import calendarObj from '../js/inviteCalendar.js';
-    import $ from 'zepto';
+    import $ from 'jquery';
     import fetchJsonp from 'fetch-jsonp';
     import qs from 'qs';
     import { mapGetters } from 'vuex';
@@ -94,7 +94,6 @@
                 showRepeatPopStatus:false,
                 repeatText:'',
                 isAndroid:false,
-                isLLApp:false,
                 isIOS:false,
                 timeList:[{value:'08:00',active:false},
                 {value:'08:30',active:false},
@@ -157,7 +156,6 @@
         },
 
         mounted:function(){
-            this.isLLApp = CommonFun.getUaIsApp();
             this.checkInDate = this.initcheckintext?new Date(this.initcheckintext):new Date(formatter(new Date(),'YYYY-MM-DD'));
             this.dayItemWidth = $('body').width()*0.14285;
             if(this.invitetime){
@@ -262,11 +260,7 @@
                 }).then((json) =>{
                     if(json.code!=200){
                         if(json.code==600){
-                            if(this.isLLApp&&this.isAndroid){
-                                CommonFun.androidLogin();
-                            } else {
-                                location.href= eDomain;
-                            }
+                            location.href= eDomain;
                         } else {
                             this.repeatText = json.string;
                             this.showRepeatPopFun();

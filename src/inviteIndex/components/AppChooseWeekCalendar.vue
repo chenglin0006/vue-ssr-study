@@ -42,7 +42,7 @@
 <script>
     import formatter from 'date-formatter';
     import calendarObj from '../js/inviteCalendar.js';
-    import $ from 'zepto';
+    import $ from 'jquery';
     import fetchJsonp from 'fetch-jsonp';
     import CommonFun from '../../commonJs/CommonFun.js'
     var mDomain = CommonFun.getDomain();

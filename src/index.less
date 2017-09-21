@@ -28,3 +28,71 @@ html{
     margin-left: auto;
     margin-right: auto;
 }
+.text-ellipse{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    word-break: break-all;
+}
+.mask-div{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom: 0;
+    background: #000;
+    opacity: .6;
+    z-index: 11;
+}
+.pop-section{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom: 0;
+    z-index: 11;
+    .pop-content{
+        position: fixed;
+        top: 10rem;
+        left: 2.5rem;
+        right:2.5rem;
+        background: #fff;
+        z-index: 12;
+        min-height: 5rem;
+        border-radius: .3rem;
+        .pop-title{
+            text-align: center;
+            line-height: 4rem;
+        }
+        .close-btn{
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            width: 1.2rem;
+        }
+    }
+}
+.flex-parent{
+	display:flex;
+    display: box;
+    display: -webkit-box;
+    display: -ms-flexbox;
+}
+.flex-child{
+	flex:1;
+    -webkit-box-flex: 1;
+    -ms-box-flex: 1; 
+    -ms-flex: 1;
+}
+
+ul, ol, li {
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+ul{
+    margin-top: 0;
+    margin-bottom: 0;
+}

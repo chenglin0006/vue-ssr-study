@@ -25,7 +25,7 @@
     import { mapGetters } from 'vuex';
     import formatter from 'date-formatter';
     import qs from 'qs';
-    import $ from 'zepto';
+    import $ from 'jquery';
     import fetchJsonp from 'fetch-jsonp';
     import CommonFun from '../../commonJs/CommonFun.js'
     var mDomain = CommonFun.getDomain();
@@ -34,10 +34,7 @@
     export default{
         data(){
             return{
-                historyType:'用户看店',
-                isAndroid:false,
-                isLLApp:false,
-                isIOS:false,
+                historyType:'用户看店'
             }
         },
         props:['nxKey','nxToken','selectHotel','selectCustomer','item'],
@@ -47,7 +44,6 @@
             AppSelectSearch
         },
         mounted() {
-            this.isLLApp = CommonFun.getUaIsApp();
         },
         computed:{
             ...mapGetters({
@@ -87,11 +83,7 @@
                     success: (json)=>{
                         if(json.code != 200){
                             if(json.code==600){
-                                if(this.isLLApp&&this.isAndroid){
-                                    CommonFun.androidLogin();
-                                } else {
-                                    location.href= eDomain;
-                                }
+                                location.href= eDomain;
                             } else {
                                 alert(json.string);
                                 console.log("save error",json.string);
@@ -133,11 +125,7 @@
                 }).then((json)=>{
                     if(json.code != 200){
                         if(json.code==600){
-                            if(this.isLLApp&&this.isAndroid){
-                                CommonFun.androidLogin();
-                            } else {
-                                location.href= eDomain;
-                            }
+                            location.href= eDomain;
                         } else {
                             alert(json.msg);
                             console.log('更改用户到店的备注失败')

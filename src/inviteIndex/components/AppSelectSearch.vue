@@ -11,7 +11,7 @@
 <script>
     import Vue from 'vue';
     import vSelect from './Select.vue';
-    import $ from 'zepto'
+    import $ from 'jquery'
     export default{
         data(){
             return{

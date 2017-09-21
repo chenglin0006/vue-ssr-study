@@ -1354,6 +1354,8 @@
             overflow:hidden;
             padding-left: 0;
             border-bottom: solid 1px #ebebeb;
+            margin-top:0;
+            margin-bottom:0;
             &:last-child{
                 padding-bottom: 0;
             }
