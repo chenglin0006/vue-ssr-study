@@ -1,3 +1,4 @@
+import fetchJsonp from 'fetch-jsonp';
 function deepClone(obj) {
     var str, newobj = obj.constructor === Array ? [] : {};
       if(typeof obj !== 'object'){
@@ -31,9 +32,32 @@ function getEDomain(){
     return eDomain;
 }
 
+function ajaxFun(ajaxUrl){
+  return new Promise((resolve)=>{
+    fetchJsonp(ajaxUrl, {
+        jsonpCallback: 'jsonp',
+        withCredentials: true
+    })
+    .then(function(response) {
+        return response.json();
+    }).then((json)=>{
+        if(json.code!=200){
+            alert('获取信息失败:'+json.msg);
+            console.log('获取信息失败', json.msg);
+            return
+        }
+        resolve(json);
+    }).catch(function(ex) {
+        alert('请求错误');
+        console.log(ex);
+    });
+  });
+}
+
 module.exports = {
     deepClone:deepClone,
     getDomain:getDomain,
     getGDomain:getGDomain,
-    getEDomain:getEDomain
+    getEDomain:getEDomain,
+    ajaxFun:ajaxFun
 };

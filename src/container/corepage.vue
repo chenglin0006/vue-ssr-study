@@ -17,6 +17,7 @@
 
 <script>
 import PageTitle from '../components/page-title.vue'
+import test from './test.js'
 export default {
     asyncData ({ store, route}) {
         return store.dispatch('setInitData', { title:'1233',name:'456',listLength:'12' });
@@ -33,6 +34,7 @@ export default {
         data: {}
     },
     mounted() {
+        test();
     },
     methods: {
     },

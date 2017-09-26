@@ -294,22 +294,7 @@ export default {
                 shopId:this.shopId
             }
             let ajaxUrl = mDomain+'/lovelab/hotelInfo/hotelBriefInfo?'+qs.stringify(params);
-            // return;
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert(json.msg);
-                        console.log('获取酒店基本信息失败')
-                        return;
-                    }
-                }
+            CommonFun.ajaxFun(ajaxUrl).then((json)=>{
                 if(json.content.hotelInfo.description){
                     json.content.hotelInfo.description = json.content.hotelInfo.description.split('\n').join('<br>');
                 }
@@ -319,9 +304,6 @@ export default {
                 } else {
                     this.imgList=[];
                 }
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.log('ajax failed', ex);
             });
         },
         //获取优惠信息
@@ -330,21 +312,7 @@ export default {
                 shopId:this.shopId
             }
             let ajaxUrl = mDomain+'/lovelab/hotelInfo/specialinfo?'+qs.stringify(params);
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert("查询优惠信息失败:"+json.msg);
-                        console.log('查询优惠信息失败')
-                        return;
-                    }
-                }
+            CommonFun.ajaxFun(ajaxUrl).then((json)=>{
                 if(JSON.stringify(json.content)!='{}'){
                     json.content.showText='';
                     json.content.discountNum = json.content.visible.length+json.content.invisible.length;
@@ -360,9 +328,6 @@ export default {
                 } else {
                     this.discountData = null;
                 }
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.log('ajax failed', ex);
             });
         },
         //获取宴会厅信息
@@ -373,30 +338,13 @@ export default {
                 scheduleTo:this.scheduleTo
             }
             let ajaxUrl = mDomain+'/lovelab/hallSchedule/list?'+qs.stringify(params);
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert("查询宴会厅信息失败:"+json.msg);
-                        console.log('查询宴会厅信息失败')
-                        return;
-                    }
-                }
+            CommonFun.ajaxFun(ajaxUrl).then((json)=>{
                 if(json.content&&json.content.hallList){
                     json.content.hallList.forEach((ele,index)=>{
                         ele.needSchedule = json.content.needSchedule;
                     });
                 }
                 this.hallListData = json.content&&json.content.hallList?json.content.hallList:[];
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.log('ajax failed', ex);
             });
         },
         //获取菜单列表信息
@@ -405,25 +353,8 @@ export default {
                 shopId:this.shopId
             }
             let ajaxUrl = mDomain+'/lovelab/menu/list?'+qs.stringify(params);
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert("获取菜单列表失败:"+json.msg);
-                        console.log('获取菜单列表失败')
-                        return;
-                    }
-                }
+            CommonFun.ajaxFun(ajaxUrl).then((json)=>{
                 this.menuListData = json.content&&json.content.menuArray?json.content.menuArray:[];
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.log('ajax failed', ex);
             });
         },
         //获取合作条款接口
@@ -432,21 +363,7 @@ export default {
                 shopId:this.shopId
             }
             let ajaxUrl = mDomain+'/lovelab/hotelInfo/contract?'+qs.stringify(params);
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert("查询合作信息失败:"+json.msg);
-                        console.log('查询合作信息失败')
-                        return;
-                    }
-                }
+            CommonFun.ajaxFun(ajaxUrl).then((json)=>{
                 if(json.content){
                     json.content.startTimeShow = json.content.startTime?formatter(new Date(json.content.startTime),'YYYY-MM-DD'):'';
                     json.content.endTimeShow = json.content.endTime?formatter(new Date(json.content.endTime),'YYYY-MM-DD'):'';
@@ -454,9 +371,6 @@ export default {
                 } else{
                     this.cooperateData = null;
                 }
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.log('ajax failed', ex);
             });
         },
         //获取设施信息接口
