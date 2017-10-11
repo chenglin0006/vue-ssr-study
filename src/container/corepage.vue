@@ -1,16 +1,12 @@
 <template>
 <div class="corepage">
     
-    <page-title title="主页面"></page-title>
+    <page-title title="主页面"</page-title>
     <div>
         测试数据：
         <p>title:{{initData.title}}</p>
         <p>name:{{initData.name}}</p>
         <p v-if="initData.listLength">数组长度：{{initData.listLength}}</p>
-        <p>visitShopNum:{{initData.visitShopNum}}</p>
-        <p>allOrderTransAmount:{{initData.allOrderTransAmount}}</p>
-        <p>allOrderNum:{{initData.allOrderNum}}</p>
-        <p>inviteNum:{{initData.inviteNum}}</p>
     </div>
 </div>
 </template>

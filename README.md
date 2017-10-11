@@ -1,9 +1,9 @@
-## vue-ssr-step-2
+## vue-ssr-stusy
 
 * npm install
 
 * npm run build
 
-* node app.js
+* node devserver.js
 
 * http://localhost:3000/
