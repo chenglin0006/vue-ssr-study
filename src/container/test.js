@@ -10,6 +10,8 @@ module.exports = function(){
 	var hw = es6Test();
 	let a = hw.next();
 	console.log(a);
-	// let b = hw.next();
-	// console.log(b);
+	let b = hw.next();
+	console.log(b);
+	let c = hw.next();
+	console.log(c);
 }
