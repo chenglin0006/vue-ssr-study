@@ -28,7 +28,7 @@
                 </div>
             </div>
         </div>
-        <div class="hotel-list-div" v-if="shopList.length">
+        <div class="hotel-list-div" ref="wrapper" v-if="shopList.length">
             <app-hotel-item :key="index" :item="item" v-for="(item,index) in shopList"></app-hotel-item>
         </div>
         <div class="hotel-list-div null-status" v-else>
@@ -50,6 +50,7 @@ import qs from 'qs';
 import fetchJsonp from 'fetch-jsonp';
 import CommonFun from '../commonJs/CommonFun.js';
 import AppBottomTab from '../commonApp/AppBottomTab.vue';
+import BScroll from 'better-scroll'
 var mDomain = CommonFun.getDomain();
 var eDomain = CommonFun.getEDomain();
 
@@ -70,6 +71,7 @@ export default {
             pageIndex:1,
             pageSize:10,
             showLoadingStatus:false,
+            scroll:null
         }
     },
     props:[],
@@ -129,6 +131,27 @@ export default {
         this.filterSelectList = this.regionSelectList;
         this.searchFun();
         this.pageIndex++;
+        // setTimeout(()=>{
+        //     const options = {
+        //         probeType: 3,
+        //         scrollY: true // 因为scrollY默认为true，其实可以省略
+        //     }
+        //     options.pullUpLoad = {
+        //       threshold: 0 // 在上拉到超过底部 20px 时，触发 pullingUp 事件
+        //     }
+        //     options.pullDownRefresh = {
+        //      // threshold: 10, // 当下拉到超过顶部 50px 时，触发 pullingDown 事件
+        //      stop: 20 // 刷新数据的过程中，回弹停留在距离顶部还有 20px 的位置
+        //     }
+        //     this.scroll = new BScroll(this.$refs.wrapper, options);
+        //     console.log(this.scroll,'===');
+        //     this.scroll.on('scrollEnd', () => {
+        //         console.log(this.scroll.y,this.scroll.maxScrollY + 50)
+        //         // this.searchFun();
+        //         // this.pageIndex++;
+        //         // this.scroll.finishPullDown();
+        //     })
+        // },2000)
         $('.hotel-list-div').on('scroll', this.scrollMore);
     },
     methods:{
@@ -354,6 +377,7 @@ export default {
                 if(json.content.shopList&&json.content.shopList.length){
                     this.shopList  = this.shopList.concat(json.content.shopList);
                 }
+                
             }).catch(function(ex) {
                 alert('网络异常，请重试');
                 console.log('查询酒店列表失败', ex);
@@ -511,6 +535,7 @@ export default {
         bottom: 5rem;
         padding-bottom: .4rem;
         top: 10rem;
+        z-index: 1000;
         &.is-ios{
             top: 11rem;
         }
