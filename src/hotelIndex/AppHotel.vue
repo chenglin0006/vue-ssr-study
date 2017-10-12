@@ -177,7 +177,7 @@ export default {
             let scrollTop = $('.hotel-list-div')[0].scrollTop; //滚动到的当前位置
             let scrollHeight = $('.hotel-list-div').height(); //容器高度
             let nHeight = $('.hotel-list-div')[0].scrollHeight; //滚动距离总长(注意不是滚动条的长度)
-            if (scrollTop + scrollHeight == nHeight) {
+            if (scrollTop + scrollHeight +4 == nHeight) {
                 if (this.moreModule) {
                     this.searchFun();
                     this.pageIndex++;
