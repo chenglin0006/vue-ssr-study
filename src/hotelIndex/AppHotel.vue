@@ -51,6 +51,8 @@ import fetchJsonp from 'fetch-jsonp';
 import CommonFun from '../commonJs/CommonFun.js';
 import AppBottomTab from '../commonApp/AppBottomTab.vue';
 import BScroll from 'better-scroll'
+import sw from '../utils/serviceworkers/swregister'
+sw()
 var mDomain = CommonFun.getDomain();
 var eDomain = CommonFun.getEDomain();
 
@@ -391,7 +393,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less" rel="stylesheet/less">
+<style lang="less" rel="stylesheet/less">
     @import url('../commonLess/util');
     @import url('../commonLess/border');
     .hotel-list-index-section{
@@ -535,7 +537,7 @@ export default {
         bottom: 5rem;
         padding-bottom: .4rem;
         top: 10rem;
-        z-index: 1000;
+        z-index: 10;
         &.is-ios{
             top: 11rem;
         }
