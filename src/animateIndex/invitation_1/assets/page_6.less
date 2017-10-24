@@ -1,0 +1,96 @@
+.page-6 {
+    .ani-huacu {
+        opacity: 0;
+    }
+    
+    .img-wrap {
+        position: absolute;
+        z-index: 3;
+        width: 100%;
+        // box-sizing: border-box;
+        // padding: 0 .15rem;
+
+        .inner {
+            position: relative;
+            margin: 0 auto;
+        }
+        &.img-wrap-lf {
+            width: 71.3%;
+            left: 0;
+            top: 1.5rem;
+            
+            .wrap-0 {
+                padding: 1.8rem 1.2rem;
+            }
+        }
+        &.img-wrap-rt {
+            width: 65.3%;
+            right: -3.2rem;
+            top: 18.3rem;
+
+            .wrap-0 {
+                padding: 1.6rem 1rem;
+            }
+        }
+    }
+    .wrap-0 {
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        padding: 2.4rem 1.5rem;
+        box-sizing: border-box;
+
+        .wrap-1 {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            clip-path: polygon(50% 0, 100% 25%, 99.5% 77%, 50% 100%, 0.5% 77%, 0 25%);
+        }
+        // .photo {
+        //     position: absolute;
+        //     left: 50%;
+        //     top: 0;
+        //     height: 100%;
+        // }
+    }
+
+    .huacu-1 {
+        position: absolute;
+        width: 26.4rem;
+        height: 29.2rem;
+        background: url("./img/huacu_1.png") no-repeat;
+        background-size: contain;
+
+        &.top {
+            left: -4.2rem;
+            top: -.3rem;
+            transform: rotate(23deg) scale(.6);
+        }
+        &.btm {
+            left: -2.6rem;
+            bottom: -.7rem;
+            transform: rotate(250deg) scale(.65);
+        }
+    }
+    .huacu-2 {
+        position: absolute;
+        width: 15.8rem;
+        height: 19.2rem;
+        background: url("./img/huacu_2.png") no-repeat;
+        background-size: contain;
+
+        &.top {
+            right: 1.7rem;
+            top: 5rem;
+        }
+        &.btm {
+            right: .7rem;
+            bottom: 3.9rem;
+            transform: rotate(127deg) scale(.95);
+        }
+    }
+}

@@ -1,0 +1,155 @@
+.page-4 {
+    .ani-yezi-1, .ani-yezi-2, .ani-yezi-3, .ani-yezi-4, .ani-yezi-5, .ani-huacu, .ani-hua {
+        opacity: 0;
+    }
+
+    .img-wrap {
+        position: absolute;
+        left: -6.5rem;
+        top: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 1.5rem;
+    }
+
+    .inner {
+        position: relative;
+        margin: 0 auto;
+    }
+    .wrap-0 {
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        padding: 2.4rem 1.5rem;
+        box-sizing: border-box;
+
+        .wrap-1 {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            clip-path: polygon(50% 0, 100% 25%, 99.5% 77%, 50% 100%, 0.5% 77%, 0 25%);
+        }
+        // .photo {
+        //     position: absolute;
+        //     left: 50%;
+        //     top: 0;
+        //     height: 100%;
+        // }
+    }
+
+    .yezi-1 {
+        position: absolute;
+        z-index: 6;
+        width: 8.9rem;
+        height: 9.8rem;
+        background: url("./img/yezi_1.png") no-repeat;
+        background-size: contain;
+        transform: scale(1.5) rotate(45deg);
+
+        &.lf-1 {
+            left: 4.5rem;
+            top: -3.3rem;
+        }
+        &.lf-2 {
+            left: 19rem;
+            top: -3.1rem;
+            transform: scale(1.5) rotate(50deg);
+        }
+    }
+    .yezi-2 {
+        position: absolute;
+        right: -4.6rem;
+        top: -2.5rem;
+        width: 15.5rem;
+        height: 20.6rem;
+        .rotate(194deg);
+        z-index: 5;
+        background: url("./img/yezi_2.png") no-repeat;
+        background-size: contain;
+    }
+    .yezi-4 {
+        position: absolute;
+        left: -4.5rem;
+        top: -1.6rem;
+        z-index: 5;
+        width: 12rem;
+        height: 18.9rem;
+        background: url("./img/yezi_4.png") no-repeat;
+        background-size: contain;
+    }
+    .yezis-bg {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 16.4rem;
+        background: url("./img/yezis_bg.png");
+        background-size: contain;
+    }
+    .huacu {
+        position: absolute;
+        z-index: 7;
+        background: url("./img/huacu_1.png") no-repeat;
+        background-size: contain;
+
+        &.rt {
+            right: .8rem;
+            bottom: 0;
+            width: 25rem;
+            height: 26rem;
+            .rotate(80deg);
+        }
+    }
+
+    .hua {
+        position: absolute;
+        z-index: 6;
+        background: url("./img/hua.png") no-repeat;
+        background-size: contain;
+
+        &.top-lf {
+            left: 2.9rem;
+            top: 2rem;
+            width: 5.2rem;
+            height: 5.7rem;
+        }
+        &.top-mid {
+            left: 50%;
+            top: 0;
+            margin-left: -.26rem;
+            width: 5.2rem;
+            height: 5.7rem;
+        }
+        &.top-rt {
+            right: 4.5rem;
+            top: 1.4rem;
+            width: 5.2rem;
+            height: 5.7rem;
+        }
+        &.btm-lf {
+            left: 5.3rem;
+            bottom: 0;
+            width: 5.2rem;
+            height: 5.7rem;
+        }
+        &.btm-mid {
+            left: 50%;
+            bottom: -1rem;
+            z-index: 8;
+            margin-left: -3.7rem;
+            width: 5.2rem;
+            height: 5.7rem;
+        }
+        &.btm-rt {
+            right: 4rem;
+            bottom: 1.4rem;
+            width: 5.2rem;
+            height: 5.7rem;
+        }
+    }
+}
+    

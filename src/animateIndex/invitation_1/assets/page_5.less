@@ -1,0 +1,105 @@
+.page-5 {
+    .ani-yezi, .ani-huacu, .ani-hua {
+        opacity: 0;
+    }
+    .content {
+        position: relative;
+        overflow: hidden;
+    }
+    .yezi-1 {
+        position: absolute;
+        z-index: 3;
+        width: 8.9rem;
+        height: 9.8rem;
+        background: url("./img/yezi_1.png") no-repeat;
+        background-size: contain;
+
+        &.top-lf {
+            left: 4.2rem;
+            top: -3rem;
+            transform: rotate(48deg) scale(1.5);
+        }
+        &.btm-rt {
+            right: 8.5rem;
+            bottom: 0;
+            transform: rotate(227deg) scale(1.5);
+        }
+    }
+    .yezi-4 {
+        position: absolute;
+        z-index: 3;
+        width: 11.2rem;
+        height: 13.2rem;
+        background: url("./img/yezi_4.png") no-repeat;
+        background-size: contain;
+
+        &.top-lf {
+            left: -2.2rem;
+            top: 1.1rem;
+            transform: scale(1.5);
+        }
+        &.btm-rt {
+            right: .6rem;
+            bottom: 4.8rem;
+            transform: rotate(181deg) scale(1.5);
+        }
+    }
+    .hua {
+        position: absolute;
+        z-index: 4;
+        width: 5.2rem;
+        height: 5.7rem;
+        background: url("./img/hua.png") no-repeat;
+        background-size: contain;
+        transform: scale(1.2);
+
+        &.top-lf {
+            left: 2.3rem;
+            top: 3.2rem;
+            
+        }
+        &.top-rt {
+            left: 17.6rem;
+            top: .2rem;
+        }
+        &.btm-lf {
+            right: 22rem;
+            bottom: 3.8rem;
+        }
+        &.btm-rt {
+            right: 6.2rem;
+            bottom: 6.4rem;
+        }
+    }
+    .huacu {
+        position: absolute;
+        left: -11.1rem;
+        top: -14.7rem;
+        z-index: 4;
+        width: 26.4rem;
+        height: 29.2rem;
+        background: url("./img/huacu.png") no-repeat;
+        background-size: contain;
+        transform: rotate(120deg);
+    }
+
+    .img.bg {
+        margin-top: -3rem;
+    }
+    .wrap-0 {
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        clip-path: polygon(0 21.5%, 39.5% 4%, 56% 2%, 82% 14%, 100% 36%, 100% 66%, 88% 81%, 57.6% 93%, 35.8% 91%, 3.5% 77%, 0 73%);
+    }
+    // .photo {
+    //     position: absolute;
+    //     left: 50%;
+    //     top: 0;
+    //     height: 100%;
+    // }
+}

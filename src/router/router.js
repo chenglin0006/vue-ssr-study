@@ -13,12 +13,15 @@ import AppHotelDetailCooperateIndex from '../hotelIndex/AppHotelDetailCooperateI
 import AppHotelDetailOperateIndex from '../hotelIndex/AppHotelDetailOperateIndex.vue'
 import AppHotelDetailHallIndex from '../hotelIndex/AppHotelDetailHallIndex.vue'
 import AppHotelDetailPicIndex from '../hotelIndex/AppHotelDetailPicIndex.vue'
+import AppAnimateIndex1 from '../animateIndex/invitation_1/app.vue'
+import AppAnimateIndex from '../animateIndex/AppAnimateIndex.vue'
 // 使用vue-router
 Vue.use(VueRouter);
 
 const Invite = () => import('../inviteIndex/AppInvite.vue')
 const Hotel = () => import('../hotelIndex/AppHotel.vue')
 const HotelDetail = () => import('../hotelIndex/AppHotelDetail.vue')
+const Animate =() => import('../animateIndex/AppAnimateIndex.vue')
 
 // 路由映射
 const routers = [{
@@ -36,6 +39,14 @@ const routers = [{
     name: 'routerpage2',
     meta: {title: "路由页面2"},
     component: require('../container/routerpage2.vue')
+}, {
+    path: '/animate',
+    name: 'animate',
+    component: Animate,
+    meta:{title:"动画",showBottom:true,tab:'animate'},
+    children:[
+        {path:'index1',name:'index1',component:AppAnimateIndex1,meta:{title:'动画1',showBottom:false}}
+    ]
 }, {
     path: '/invite',
     name: 'invite',

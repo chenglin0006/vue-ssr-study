@@ -3,9 +3,9 @@
 -->
 <template>
 	<section class="love-lab-bottom-tab-div flex-parent" :class="{'is-android':isAndroid}" v-show="showBottom">
-        <div class="tab-title flex-child customer" :class="{'active':activeTab=='customer'}" @click="toIndex(customerLink,'customer')">
+        <div class="tab-title flex-child customer" :class="{'active':activeTab=='customer'}" @click="toIndex(animateLink,'customer')">
             <div class="img-div"></div>
-            <a>客户</a>
+            <a>动画</a>
         </div>
         <div class="tab-title flex-child calendar" :class="{'active':activeTab=='invite'}" @click="toIndex(calendarLink,'invite')">
             <div class="number-div" v-if="notDealNumber"><span>{{notDealNumber}}</span></div>
@@ -33,7 +33,7 @@
     export default{
         data(){
             return{
-                customerLink:'',
+                animateLink:'',
                 calendarLink:'',
                 hotelLink:'',
                 ownLink:'',
@@ -56,7 +56,7 @@
         },
         props:['notDealNum'],
         mounted() {
-            this.customerLink = '/customer';
+            this.animateLink = '/animate';
             this.calendarLink = '/invite';
             this.hotelLink = '/hotel';
             this.ownLink = '/own';
