@@ -1,0 +1,79 @@
+@import '../../commonLess/all_com.less';
+@import '../../commonLess/reset.less';
+@import '../../commonLess/util2.less';
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    line-height: 1;
+}
+
+.main {
+    overflow: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.page-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    .leaves {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 71.65rem;
+        height: 27.3rem;
+        background: url(./assets/img/leaves.png) 0 0 no-repeat;
+        background-size: 71.65rem 27.3rem;
+    }
+}
+
+.page {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    background-size: contain;
+
+    .img {
+        display: block;
+        width: 100%;
+    }
+}
+
+.photo {
+    background: no-repeat center;
+    background-size: cover;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: all .5s;
+    opacity: 1;
+}
+
+.fade-enter, .fade-leave-active {
+    opacity: 0;
+}
+
+@import './assets/page_index.less';
+@import './assets/page_1.less';
+@import './assets/page_2.less';
+@import './assets/page_3.less';
+@import './assets/page_4.less';
+@import './assets/page_5.less';
+@import './assets/page_6.less';
+@import './assets/page_end.less';

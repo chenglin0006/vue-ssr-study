@@ -1,0 +1,54 @@
+.page-2 {
+    .content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .marble-bg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        height: 45rem;
+        background: url(img/marble_bg.png) 0 0 no-repeat;
+    }
+
+    .card {
+        position: absolute;
+        z-index: 5;
+        left: 1.6rem;
+        right: 1.6rem;
+        top: 3.6rem;
+        bottom: 3.2rem;
+        background: url(./img/card_bg_2.png) no-repeat;
+        background-size: 100%;
+
+        .grass {
+            position: relative;
+            margin: 4.9rem auto 0;
+            width: 26.3rem;
+            height: 1.85rem;
+            background: url(./img/sprites.png) no-repeat 0 -1rem;
+            background-size: 31.7rem 24rem;
+
+            &:last-child {
+                margin-top: 2rem;
+            }
+        }
+
+        .pic {
+            margin: 2rem auto 0;
+            width: 31rem;
+            height: 40.6rem;
+            padding: 1.8rem;
+            background: #fff;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}

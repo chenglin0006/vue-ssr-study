@@ -34,7 +34,7 @@ export default {
     },
     methods: {
         toIndexFun:function(item){
-            this.$router.push({path:'/animate/index1'});
+            this.$router.push({path:'/animate/index'+item});
         }
     }
 }

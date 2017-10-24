@@ -36,9 +36,6 @@
                     </div>
                     <div class="date-time-wrap">
                         <div class="date" v-text="'2017-10-01'"></div>
-                        <!-- <div class="date" v-text="data.attributes.weddingTime.split(/\s/)[0]"></div>
-                        <div class="time" v-text="data.attributes.weddingTime.split(/\s/)[1]"></div> -->
-                        <!-- <cust-edit-btn-cpt name="weddingTime" type="time"></cust-edit-btn-cpt> -->
                     </div>
                     <div class="text">
                         宴址：长宁区安化路

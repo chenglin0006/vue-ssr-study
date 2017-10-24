@@ -1,0 +1,105 @@
+.page-index {
+    .content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .marble-bg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 45rem;
+        background: url(img/marble_bg.png) 0 0 no-repeat;
+        transform: translate3d(0, 100%, 0);
+    }
+
+    .card {
+        position: absolute;
+        z-index: 5;
+        left: 1.6rem;
+        right: 1.6rem;
+        top: 3.6rem;
+        bottom: 3.2rem;
+        background: url(//www.dpfile.com/app/app-wed-wedding-invitation/static/card_bg.png?a121c02ba8de49021e1631b8215778bc) no-repeat;
+        background-size: 100%;
+        text-align: center;
+
+        .card-title {
+            position: absolute;
+            top: 30%;
+            width: 100%;
+            line-height: 2.4rem;
+            color: #6b866b;
+
+            p:first-child {
+                margin: 0 auto;
+                width: 15.25rem;
+                height: 2.4rem;
+                background: url(./img/text0.png) no-repeat 0 0;
+                background-size: contain;
+            }
+            p:last-child {
+                margin: 1rem auto;
+                width: 17.85rem;
+                height: 2.4rem;
+                background: url(./img/text1.png) no-repeat 0 0;
+                background-size: contain;
+            }
+        }
+        .card-name {
+            position: absolute;
+            top: 45%;
+            width: 100%;
+            line-height: 1;
+            //font-family: "STSongti-SC", "SimSun", "STSong", '\5b8b\4f53', serif;
+            font-size: 2.6rem;
+            font-weight: 500;
+            color: #6b866b;
+
+            p {
+                position: relative;
+            }
+            p:nth-child(2) {
+                line-height: 4.5rem;
+            }
+            span {
+                display: inline-block;
+                vertical-align: bottom;
+                transform-origin: center bottom;
+            }
+            .dash-1 {
+                margin-bottom: 2rem;
+            }
+            .dash-2 {
+                margin-top: 2rem;
+            }
+        }
+        .card-time {
+            position: absolute;
+            top: 70%;
+            width: 100%;
+            line-height: 1.8rem;
+            //font-family: "STSongti-SC", serif;
+            font-size: 1.8rem;
+            font-weight: lighter;
+            color: #6b866b;
+        }
+
+        .card-address {
+            position: absolute;
+            top: 75%;
+            padding: 0 15%;
+            width: 100%;
+            line-height: 2rem;
+            //font-family: "FZZhengHeiS-DB-GB", serif;
+            font-size: 1.8rem;
+            color: #6b866b;
+
+            span {
+                display: inline-block;
+            }
+        }
+    }
+}

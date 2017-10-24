@@ -1,0 +1,102 @@
+.page-end {
+    .content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .marble-bg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        height: 45rem;
+        background: url(img/marble_bg.png) 0 0 no-repeat;
+    }
+
+    .card {
+        position: absolute;
+        z-index: 5;
+        left: 1.6rem;
+        right: 1.6rem;
+        top: 3.6rem;
+        bottom: 3.2rem;
+        background: url(./img/card_bg_2.png) no-repeat;
+        background-size: 100%;
+        color: #000;
+        text-align: center;
+
+        .pic {
+            position: relative;
+            margin: 1.55rem auto 0;
+            width: 30.9rem;
+            height: 35.1rem;
+            padding: 0 .9rem;
+            background: #fff;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .grass {
+            margin: 2.2rem auto 0;
+            width: 30.6rem;
+            height: 1.6rem;
+            background: url(./img/sprites.png) no-repeat 0 -22rem;
+            background-size: 31.7rem 24rem;
+        }
+
+        .name {
+            margin-top: 3.7rem;
+            font-size: 2.5rem;
+            color: #6b866b;
+
+            .dash {
+                margin-top: 2rem;
+            }
+        }
+
+        .time {
+            position: relative;
+            margin-top: 3rem;
+            line-height: 1.6rem;
+            font-size: 1.8rem;
+            color: #6b866b;
+        }
+
+        .address {
+            position: relative;
+            margin-top: 1rem;
+            padding: 0 15%;
+            line-height: 2rem;
+            font-size: 1.8rem;
+            color: #6b866b;
+        }
+
+        .room {
+            position: relative;
+            margin-top: 1.7rem;
+            line-height: 2rem;
+            font-size: 2.4rem;
+        }
+    }
+
+    .md-cust-edit-btn {
+        left: 50%;
+    }
+
+    @media only screen and (max-height: 530px) {
+        .card {
+            .name {
+                margin-top: 2rem;
+
+                .dash {
+                    display: none;
+                }
+            }
+        }
+    }
+}
