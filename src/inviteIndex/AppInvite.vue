@@ -1,33 +1,38 @@
 <template>
-<div class="nestedrouter1">
-    <section class="invite-section">
-        <div class="type-summary-div three-line-div flex-parent" v-if="lineTypeList.length>1">
-            <div class="summary-tag flex-child" v-for="(item,index) in lineTypeList">
-                <div class="tag-title" :class="{'banquet':item.type==1,'wed':item.type==3,'pay':item.type==2}">
+    <section class="invite-section" :class="{'is-android':isAndroid}">
+        <div class="tips-info-div" v-show="showTipsStatus">
+            <span class="tips-span">您有{{notDealNum}}个邀约日程待完成，请及时处理！</span>
+            <div class="close-tips" @click="hideTipsFun"></div>
+        </div>
+        <div class="type-summary-div" :class="{'more-line-div':lineTypeList.length>=4,'three-line-div flex-parent':lineTypeList.length>1&&lineTypeList.length<4}" v-if="lineTypeList.length>1">
+            <div class="summary-tag" :class="{'flex-child':lineTypeList.length>1&&lineTypeList.length<4}" v-for="(item,index) in lineTypeList" @click="chooseTypeDetailFun(item.type)">
+                <div class="tag-title" :class="{'banquet':item.type==1,'wed':item.type==3,'pay':item.type==2,'shop':item.type==4,'dress':item.type==5}">
                     <span v-if="item.type==1">婚宴日程</span>
-                    <span v-if="item.type==3">婚庆日程</span>
                     <span v-if="item.type==2">收款日程</span>
+                    <span v-if="item.type==3">婚庆日程</span>
+                    <span v-if="item.type==4">门店婚宴</span>
+                    <span v-if="item.type==5">礼服日程</span>
                 </div>
                 <div class="tag-content">
                     <div class="number-item flex-parent" v-if="item.type!=2">
                         <div class="label-div flex-child">邀约</div>
-                        <div class="value-div flex-child">{{item.appointmentManCount}}/{{item.appointment}}</div>
+                        <div class="value-div flex-child">{{item.count.appointmentManCount}}/{{item.count.appointment}}</div>
                     </div>
                     <div class="number-item flex-parent" v-if="item.type!=2">
                         <div class="label-div flex-child">到店</div>
-                        <div class="value-div flex-child">{{item.appointmentDoneManCount}}/{{item.appointmentDone}}</div>
+                        <div class="value-div flex-child">{{item.count.appointmentDoneManCount}}/{{item.count.appointmentDone}}</div>
                     </div>
                     <div class="number-item flex-parent" v-if="item.type!=2">
                         <div class="label-div flex-child">取消</div>
-                        <div class="value-div flex-child">{{item.appointmentCancelManCount}}/{{item.appointmentCancel}}</div>
+                        <div class="value-div flex-child">{{item.count.appointmentCancelManCount}}/{{item.count.appointmentCancel}}</div>
                     </div>
                     <div class="number-item flex-parent" v-if="item.type==2">
                         <div class="label-div flex-child">待收款</div>
-                        <div class="value-div flex-child">{{item.checkout}}</div>
+                        <div class="value-div flex-child">{{item.count.checkout}}</div>
                     </div>
                     <div class="number-item flex-parent" v-if="item.type==2">
                         <div class="label-div flex-child">已收款</div>
-                        <div class="value-div flex-child">{{item.checkoutDone}}</div>
+                        <div class="value-div flex-child">{{item.count.checkoutDone}}</div>
                     </div>
                 </div>
             </div>
@@ -35,15 +40,15 @@
         <div class="one-line-div flex-parent" v-if="lineTypeList.length==1">
             <div class="one-line-tag-div flex-child">
                 <div class="one-line-title">已邀约</div>
-                <div class="one-line-value">{{lineTypeList[0].appointmentManCount}}/{{lineTypeList[0].appointment}}</div>
+                <div class="one-line-value">{{lineTypeList[0].count.appointmentManCount}}/{{lineTypeList[0].count.appointment}}</div>
             </div>
             <div class="one-line-tag-div flex-child">
                 <div class="one-line-title">已到店</div>
-                <div class="one-line-value">{{lineTypeList[0].appointmentDoneManCount}}/{{lineTypeList[0].appointmentDone}}</div>
+                <div class="one-line-value">{{lineTypeList[0].count.appointmentDoneManCount}}/{{lineTypeList[0].count.appointmentDone}}</div>
             </div>
             <div class="one-line-tag-div flex-child">
                 <div class="one-line-title">已取消</div>
-                <div class="one-line-value">{{lineTypeList[0].appointmentCancelManCount}}/{{lineTypeList[0].appointmentCancel}}</div>
+                <div class="one-line-value">{{lineTypeList[0].count.appointmentCancelManCount}}/{{lineTypeList[0].count.appointmentCancel}}</div>
             </div>
         </div>
         <div class="report-table-div" @click="showInviteSummaryFun">
@@ -100,6 +105,7 @@
                     </div>
                 </div>
                 <div class="invite-detail-table-range-list">
+                    <!-- <div class="title-date-div" :class="{'scroll-y':scrollTopYStatus}"> -->
                     <div class="title-date-div">
                         <div class="null-div"></div>
                         <div class="date-item" :class="item.weekText" v-for="(item,index) in filterWeekArry">
@@ -107,23 +113,29 @@
                             <p class="date-item-week-text">{{item.weekText}}</p>
                         </div>
                     </div>
+
                     <div class="invite-detail-table-range-item" :id="index" v-for="(item,index) in inviteData">
                         <div class="list-data-div" v-for="(listData,index) in item">
                             <div class="invite-item" :class="{
-                                'invite-type':invite.eventType==1,
-                                'pay-type':invite.eventType==2,
-                                'wed-type':invite.eventType==3}" @click="showInviteDetailPopFun(invite)" v-for="(invite,index) in listData">
+                                'invite-type':invite.type==1,
+                                'pay-type':invite.type==2,
+                                'wed-type':invite.type==3,
+                                'shop-type':invite.type==4,
+                                'dress-type':invite.type==5
+                                }" @click="showInviteDetailPopFun(invite)" v-for="(invite,index) in listData">
                                 <div class="border-left-div-3"></div>
                                 <div class="item-date-div">
                                     <p class="event-title-p">{{invite.eventTitleShow}}</p>
                                     <!-- <p style="font-weight: bold;">{{invite.eventStatusTitle}}</p> -->
                                     <p class="text-ellipse" style="width:9rem;">{{invite.shopName}}</p>
-                                    <p>{{invite.gradeTitle}} {{invite.phoneShow}}</p>
+                                    <div style="line-height: 1.1rem;margin-bottom: .5rem;height: 1.1rem;">
+                                        <div class="text-ellipse invite-user-name">{{invite.eventInfo.yzsUserName}}</div> 
+                                        {{invite.phoneShow}}</div>
                                     <p v-show="selectSaleList.length>1||selectSaleList.length==0">{{invite.salesName}}</p>
-                                    <p>{{invite.hourTime}}</p>
+                                    <p>{{invite.gradeTitle}} {{invite.hourTime}}</p>
                                     <div v-if="invite.eventType==1" v-show="invite.eventStatus" class="status-div" :class="{'visit-shop':invite.eventStatus==101,'visit-canceled':invite.eventStatus==102}">{{invitePayStatusMap[invite.eventStatus]}}</div>
-                                    <div v-if="invite.eventType==2" v-show="invite.eventStatus" class="status-div" :class="{'has-pay':invite.eventStatus==201}">{{invitePayStatusMap[invite.eventStatus]}}</div>
-                                    <div v-if="invite.eventType==3" v-show="invite.eventStatus" class="status-div" :class="{'wed-visit-shop':invite.eventStatus==301,'visit-canceled':invite.eventStatus==302}">{{invitePayStatusMap[invite.eventStatus]}}</div>
+                                    <div v-if="invite.type==2" v-show="invite.eventStatus" class="status-div" :class="{'has-pay':invite.eventStatus==201}">{{invitePayStatusMap[invite.eventStatus]}}</div>
+                                    <div v-if="invite.type==3" v-show="invite.eventStatus" class="status-div" :class="{'wed-visit-shop':invite.eventStatus==101,'visit-canceled':invite.eventStatus==102}">{{invitePayStatusMap[invite.eventStatus]}}</div>
                                 </div>
                             </div>
                         </div>
@@ -131,12 +143,13 @@
                 </div>
             </div>
         </div>
+        <!-- <app-bottom-tab :not-deal-num="notDealNum" :active-text="{text:'calendar'}"></app-bottom-tab> -->
         <app-invite-detail-pop @refreshSummaryNum="filterSearchFun" @refreshInviteNum="getInviteNotDealNumFun" @showchangetimepop="showInviteCalendarFun" :item="activeInviteItem" @hidepop="hideInviteDetailPopFun" v-show="showInviteDetailPopStatus" @cancelvisitshop="showSureCancelFun"></app-invite-detail-pop>
         <app-history-invite-calendar :initcheckintext="activeInviteItem.inviteDate" :yzsuserid="activeInviteItem.yzsUserId" :invitetime="activeInviteItem.inviteTime" v-if="showInviteCalendarStatus" :maxscheduledatenumber="inviteTimeMaxscheduledatenumber" :startdate="inviteTimeStartDate" @hidechoosepop="hideInviteCalendarFun" :type="changeTimeType"></app-history-invite-calendar>
         <!-- 头部酒店和顾问的搜索弹窗 写两个组件是为了每次直接定位至选中项-->
         <app-select-search :multiple="multiple" :option-list="hotelList" :placeholder-obj="placeholderHotelObj" :select-model="selectHotelList" @setselectdata="selectHotelFun" @hidepop="hideFilterSelectHotelFun" v-show="showFilterSelectHotelStatus"></app-select-search>
         <app-select-search :multiple="multiple" :option-list="saleList" :placeholder-obj="placeholderSaleObj" :select-model="selectSaleList" @setselectdata="selectSaleFun" @hidepop="hideFilterSelectSaleFun" v-show="showFilterSelectSaleStatus"></app-select-search>
-        <app-invite-summary-pop :hq-summary-list="hqSummaryList" :hy-summary-list="hySummaryList" v-show="showInviteSummaryStatus" @hidepop="hideInviteSummaryFun"></app-invite-summary-pop>
+        <app-invite-summary-pop :summary-list="summaryList" :hq-summary-list="hqSummaryList" :hy-summary-list="hySummaryList" :shop-summary-list="shopSummaryList" :dress-sumarry-list="dressSummaryList" v-show="showInviteSummaryStatus" @hidepop="hideInviteSummaryFun"></app-invite-summary-pop>
         <app-choose-week-calendar :initcheckintext="filterCheckIn" @hidechoosepop="hideChooseWeekFun" @changetime="changeFilterDate" v-show="showChooseWeekStatus" :maxscheduledatenumber="chooseWeekMaxscheduledatenumber" :startdate="chooseWeekStartDate"></app-choose-week-calendar>
         <section class="choose-type-section" v-show="showChooseTypeStatus">
             <div class="mask-div" @click="hideChooseTypeFun" @touchmove="touchMoveFun($event)"></div>
@@ -146,598 +159,672 @@
         </section>
         <app-sure-pop v-show="showSureStatus" :text="'确认取消看店么'" @hidepop="hideSureCancelFun"></app-sure-pop>
     </section>
-</div>
 </template>
 
 <script>
-import PageTitle from '../components/page-title.vue'
-import formatter from 'date-formatter';
-import commonData from './js/commonData.js';
-import calendarObj from './js/inviteCalendar.js';
-import $ from 'jquery';
-import qs from 'qs';
-import fetchJsonp from 'fetch-jsonp';
-import AppInviteDetailPop from './components/AppInviteDetailPop.vue';
-import AppInviteSummaryPop from './components/AppInviteSummaryPop.vue';
-import AppHistoryInviteCalendar from './components/AppHistoryInviteCalendar.vue';
-import AppSurePop from './components/AppSurePop.vue';
-import AppChooseWeekCalendar from './components/AppChooseWeekCalendar.vue';
-import AppSelectSearch from './components/AppSelectSearch.vue';
-import { mapGetters } from 'vuex';
-import CommonFun from '../commonJs/CommonFun.js'
-var mDomain = CommonFun.getDomain();
-var eDomain = CommonFun.getEDomain();
-export default {
-    name: 'nestedrouter1',
-    components: {
-        PageTitle,
-        AppInviteDetailPop,
-        AppHistoryInviteCalendar,
-        AppInviteSummaryPop,
-        AppChooseWeekCalendar,
-        AppSurePop,
-        AppSelectSearch
-    },
-    data() {
-        return {
-            inviteDataMock:[],
-            showInviteDetailPopStatus:false,      //邀约／收款详情弹窗
-            showInviteSummaryStatus:false,  //周汇总弹窗
-            inviteData:[],
-            activeInviteItem:{},
-            showInviteCalendarStatus:false,    //更改时间弹窗
-            showFilterSelectHotelStatus:false,
-            showFilterSelectSaleStatus:false,
-            multiple:true,
-            selectHotelList:[],
-            selectSaleList:[],
-            placeholderHotelObj:{text:'请输入酒店名称'},
-            placeholderSaleObj:{text:'请输入顾问名称'},
-            scrollTopYStatus:false,
-            showChooseWeekStatus:false, //选择周日历弹窗
-            showChooseTypeStatus:false,
-            payStatusMap:commonData.payStatusMap,
-            inviteStatusMap:commonData.inviteStatusMap,
-            invitePayStatusMap:commonData.invitePayStatusMap,
-            itemTypeMap:commonData.itemTypeMap,
-            filterCheckIn:formatter(new Date(),'YYYY-MM-DD'),
-            weekTextMap:{0:'周日',1:'周一',2:'周二',3:'周三',4:'周四',5:'周五',6:'周六'},
-            showSureStatus:false, //确认取消看点弹窗
-            hqSummaryList:commonData.inviteSummaryData,
-            hySummaryList:null,
-            inviteDataTotal:[],
-            changeTimeType:'invite',
-            customerLevelMap:commonData.customerLevelMap,
-            isBoss:'',
-            currentMis:'',
-            saleList:[],
-            hotelList:[],
-            inviteTypeList:[{text:'婚宴',value:1,active:false},{text:'婚庆',value:3,active:false},{text:'收款',value:2,active:false}],
-            inviteTimeStartDate:'', //邀约日历和时间 对应的开始时间从本月初开始，后面三个月
-            chooseWeekStartDate:'', //顶部日历筛选的开始时间是2017-07-01，直到本月后面的三个月
-            inviteTimeMaxscheduledatenumber:100,
-            chooseWeekMaxscheduledatenumber:100,
-            filterTopStatus:false,
-            filterTopNumber:0,
-            notDealNum:0,
-            lineTypeList:[],
-            startSearchParams:{
-                filterCheckIn:null,
-                selectHotelList:null,
-                selectSaleList:null,
-                inviteTypeList:null
+    import formatter from 'date-formatter';
+    import commonData from './js/commonData.js';
+    import calendarObj from './js/inviteCalendar.js';
+    import $ from 'jquery';
+    import qs from 'qs';
+    import fetchJsonp from 'fetch-jsonp';
+    import AppInviteDetailPop from './components/AppInviteDetailPop.vue';
+    import AppInviteSummaryPop from './components/AppInviteSummaryPop.vue';
+    import AppHistoryInviteCalendar from './components/AppHistoryInviteCalendar.vue';
+    import AppSurePop from './components/AppSurePop.vue';
+    import AppChooseWeekCalendar from './components/AppChooseWeekCalendar.vue';
+    import AppSelectSearch from './components/AppSelectSearch.vue';
+    import { mapGetters } from 'vuex';
+    import CommonFun from '../commonJs/CommonFun.js'
+    var mDomain = CommonFun.getDomain();
+    var eDomain = CommonFun.getEDomain();
+
+    export default {
+
+        data: function() {
+            return {
+                type:0,//从主页跳转过来的链接上带的参数，直接过滤
+                inviteDataMock:[],
+                showInviteDetailPopStatus:false,      //邀约／收款详情弹窗
+                showInviteSummaryStatus:false,  //周汇总弹窗
+                inviteData:[],
+                activeInviteItem:{},
+                showInviteCalendarStatus:false,    //更改时间弹窗
+                showFilterSelectHotelStatus:false,
+                showFilterSelectSaleStatus:false,
+                multiple:true,
+                selectHotelList:[],
+                selectSaleList:[],
+                placeholderHotelObj:{text:'请输入酒店名称'},
+                placeholderSaleObj:{text:'请输入顾问名称'},
+                scrollTopYStatus:false,
+                showChooseWeekStatus:false, //选择周日历弹窗
+                showChooseTypeStatus:false,
+                payStatusMap:commonData.payStatusMap,
+                inviteStatusMap:commonData.inviteStatusMap,
+                invitePayStatusMap:commonData.invitePayStatusMap,
+                itemTypeMap:commonData.itemTypeMap,
+                filterCheckIn:formatter(new Date(),'YYYY-MM-DD'),
+                weekTextMap:{0:'周日',1:'周一',2:'周二',3:'周三',4:'周四',5:'周五',6:'周六'},
+                showSureStatus:false, //确认取消看点弹窗
+                hqSummaryList:commonData.inviteSummaryData,
+                hySummaryList:null,
+                shopSummaryList:[],
+                dressSummaryList:[],
+                inviteDataTotal:[],
+                changeTimeType:'invite',
+                customerLevelMap:commonData.customerLevelMap,
+                isBoss:'',
+                currentMis:'',
+                saleList:[],
+                hotelList:[],
+                //
+                inviteTypeList:[{text:'婚宴',value:'1_0',active:false,type:1},{text:'门店婚宴',value:'shop_-1',active:false,type:4},{text:'婚庆',value:'1_1',active:false,type:3},{text:'礼服',value:'1_2',active:false,type:5},{text:'收款',value:'2_-1',active:false,type:2}],
+                inviteTimeStartDate:'', //邀约日历和时间 对应的开始时间从本月初开始，后面三个月
+                chooseWeekStartDate:'', //顶部日历筛选的开始时间是2017-07-01，直到本月后面的三个月
+                inviteTimeMaxscheduledatenumber:100,
+                chooseWeekMaxscheduledatenumber:100,
+                filterTopStatus:false,
+                filterTopNumber:0,
+                notDealNum:0,
+                lineTypeList:[],
+                startSearchParams:{
+                    filterCheckIn:null,
+                    selectHotelList:null,
+                    selectSaleList:null,
+                    inviteTypeList:null
+                },
+                summaryList:[],
+                isIOS:false,
+                isAndroid:false,
+                showTipsStatus:true
+            };
+        },
+        components:{
+            AppInviteDetailPop,
+            AppHistoryInviteCalendar,
+            AppInviteSummaryPop,
+            AppChooseWeekCalendar,
+            AppSurePop,
+            AppSelectSearch
+        },
+        props:[],
+
+        computed: {
+            selectHotelStr:function(){
+                let arry = [];
+                this.selectHotelList.forEach((ele,index)=>{
+                    arry.push(ele.label);
+                })
+                return arry.join(',');
+            },
+            selectSaleStr:function(){
+                let arry = [];
+                this.selectSaleList.forEach((ele,index)=>{
+                    arry.push(ele.label);
+                })
+                return arry.join(',');
+            },
+            selectTypeList:function(){
+                let arry = [];
+                this.inviteTypeList.forEach((ele,index)=>{
+                    if(ele.active){
+                        arry.push(ele.text);
+                    }
+                })
+                return arry;
+            },
+            filterCheckOut:function(){
+                return this.filterCheckIn?formatter(new Date(new Date(this.filterCheckIn).getTime()+ 6 * 86400000),'YYYY-MM-DD'):""
+            },
+            filterCheckInText:function(){
+                return this.filterCheckIn?formatter(new Date(this.filterCheckIn),'YYYYMMDD'):''
+            },
+            filterCheckOutText:function(){
+                return this.filterCheckOut?formatter(new Date(this.filterCheckOut),'YYYYMMDD'):''
+            },
+            filterWeekArry:function(){
+                let arry = [];
+                [1,2,3,4,5,6,7].forEach((ele,index)=>{
+                    let obj = {
+                        dateText:'',
+                        weekText:''
+                    }
+                    let currentDate = new Date(new Date(this.filterCheckIn).getTime()+ (index) * 86400000);
+                    obj.dateText = formatter(currentDate,'YYYYMMDD');
+                    obj.weekText = this.weekTextMap[currentDate.getDay()];
+                    arry.push(obj);
+                })
+                return arry;
             }
-        }
-    },
-    computed: {
-        selectHotelStr:function(){
-            let arry = [];
-            this.selectHotelList.forEach((ele,index)=>{
-                arry.push(ele.label);
-            })
-            return arry.join(',');
         },
-        selectSaleStr:function(){
-            let arry = [];
-            this.selectSaleList.forEach((ele,index)=>{
-                arry.push(ele.label);
-            })
-            return arry.join(',');
+
+        watch:{
+            filterCheckIn:function(){
+                this.startSearchParams.filterCheckIn = this.filterCheckIn;
+            },
+            selectHotelList:function(){
+                this.startSearchParams.selectHotelList = this.selectHotelList;
+            },
+            selectSaleList:function(){
+                this.startSearchParams.selectSaleList = this.selectSaleList;
+            }
         },
-        selectTypeList:function(){
-            let arry = [];
-            this.inviteTypeList.forEach((ele,index)=>{
-                if(ele.active){
-                    arry.push(ele.text);
-                }
-            })
-            return arry;
+
+        mounted:function(){
+
+            var ua = navigator.userAgent.toLowerCase();
+            var isAndroid = false;
+            if (/iphone|ipad|ipod/.test(ua)) {
+                this.isIOS = true;
+            } else if (/android/.test(ua)) {
+                this.isAndroid = true;
+            }
+            this.fetchStatus();
+            this.$watch('inviteTypeList',()=>{
+                this.startSearchParams.inviteTypeList = this.inviteTypeList;
+            },{deep:true});
+            this.$watch('startSearchParams',()=>{
+                this.filterSearchFun();
+                this.getInviteNotDealNumFun();
+            },{deep:true});
         },
-        filterCheckOut:function(){
-            return this.filterCheckIn?formatter(new Date(new Date(this.filterCheckIn).getTime()+ 6 * 86400000),'YYYY-MM-DD'):""
-        },
-        filterCheckInText:function(){
-            return this.filterCheckIn?formatter(new Date(this.filterCheckIn),'YYYYMMDD'):''
-        },
-        filterCheckOutText:function(){
-            return this.filterCheckOut?formatter(new Date(this.filterCheckOut),'YYYYMMDD'):''
-        },
-        filterWeekArry:function(){
-            let arry = [];
-            [1,2,3,4,5,6,7].forEach((ele,index)=>{
-                let obj = {
-                    dateText:'',
-                    weekText:''
-                }
-                let currentDate = new Date(new Date(this.filterCheckIn).getTime()+ (index) * 86400000);
-                obj.dateText = formatter(currentDate,'YYYYMMDD');
-                obj.weekText = this.weekTextMap[currentDate.getDay()];
-                arry.push(obj);
-            })
-            return arry;
-        }
-    },
-    watch:{
-        filterCheckIn:function(){
-            this.startSearchParams.filterCheckIn = this.filterCheckIn;
-        },
-        selectHotelList:function(){
-            this.startSearchParams.selectHotelList = this.selectHotelList;
-        },
-        selectSaleList:function(){
-            this.startSearchParams.selectSaleList = this.selectSaleList;
-        }
-    },
-    mounted() {
-        this.fetchStatus();
-        this.$watch('inviteTypeList',()=>{
-            this.startSearchParams.inviteTypeList = this.inviteTypeList;
-        },{deep:true});
-        this.$watch('startSearchParams',()=>{
-            this.filterSearchFun();
-        },{deep:true});
-    },
-    methods: {
-        fetchStatus:function(){
-            var ajaxGetStatus = mDomain+"/lovelab/yzsinfo/shopsandsales";
-            fetchJsonp(ajaxGetStatus, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=> {
-                if(json.code!=200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
+
+        methods: {
+            fetchStatus:function(){
+                var ajaxGetStatus = mDomain+"/lovelab/yzsinfo/shopsandsales";
+                fetchJsonp(ajaxGetStatus, {
+                    jsonpCallback: 'jsonp'
+                })
+                .then(function(response) {
+                    return response.json();
+                }).then((json)=> {
+                    if(json.code!=200){
                         console.error(json.msg);
-                        alert('网络错误，请重试');
+                        alert('请求失败：'+json.msg);
                         return
                     }
-                }
-                this.isBoss = json.content.special;
-                this.currentMis = {
-                    salesId:json.content.selfMisId
-                    // label:'程林',
-                    // value:'chenglin02',
-                    // salesId:'chenglin02',
-                    // salesName:'程林'
-                }
-                json.content.salesList.forEach((ele,index)=>{
-                    ele.label = ele.salesName;
-                    ele.value = ele.salesId;
-                    if(!ele.label&&ele.value){
-                        ele.label = ele.value;
+                    this.isBoss = json.content.special;
+                    this.currentMis = {
+                        salesId:json.content.selfMisId
+                        // label:'程林',
+                        // value:'chenglin02',
+                        // salesId:'chenglin02',
+                        // salesName:'程林'
                     }
-                    if(ele.label&&!ele.value){
-                        ele.value = ele.label;
+                    json.content.salesList.forEach((ele,index)=>{
+                        ele.label = ele.salesName;
+                        ele.value = ele.salesId;
+                        if(!ele.label&&ele.value){
+                            ele.label = ele.value;
+                        }
+                        if(ele.label&&!ele.value){
+                            ele.value = ele.label;
+                        }
+                        if(!ele.label&&!ele.value){
+                            json.content.salesList.splice(index,1);
+                        }
+                    });
+                    json.content.salesList.forEach((ele,index)=>{
+                        if(ele.salesId == json.content.selfMisId){
+                            this.currentMis = ele;
+                        }
+                    });
+                    json.content.shopList.forEach((ele,index)=>{
+                        ele.label = ele.shopName;
+                        ele.value = ele.shopId;
+                    });
+                    this.saleList = json.content.salesList;
+                    this.hotelList = json.content.shopList;
+                    let today = new Date();
+                    let todayWeek = today.getDay();
+                    let firstDay = null;
+                    if(todayWeek!=0){
+                        firstDay = calendarObj.addDay(today,-todayWeek+1);
+                    } else{
+                        firstDay = calendarObj.addDay(today,-7+1);
                     }
-                    if(!ele.label&&!ele.value){
-                        json.content.salesList.splice(index,1);
-                    }
-                });
-                json.content.salesList.forEach((ele,index)=>{
-                    if(ele.salesId == json.content.selfMisId){
-                        this.currentMis = ele;
-                    }
-                });
-                json.content.shopList.forEach((ele,index)=>{
-                    ele.label = ele.shopName;
-                    ele.value = ele.shopId;
-                });
-                this.saleList = json.content.salesList;
-                this.hotelList = json.content.shopList;
-                let today = new Date();
-                let todayWeek = today.getDay();
-                let firstDay = null;
-                if(todayWeek!=0){
-                    firstDay = calendarObj.addDay(today,-todayWeek+1);
-                } else{
-                    firstDay = calendarObj.addDay(today,-7+1);
-                }
-                this.filterCheckIn = formatter(firstDay,'YYYY-MM-DD');
-                if(this.currentMis){
-                    if(this.isBoss){
-                        this.selectSaleList = [];
-                    } else {
-                        if(this.currentMis.salesId&&this.currentMis.salesName&&this.currentMis.label&&this.currentMis.value){
-                            this.selectSaleList = [this.currentMis];
-                        } else {
+                    this.filterCheckIn = formatter(firstDay,'YYYY-MM-DD');
+                    if(this.currentMis){
+                        if(this.isBoss){
                             this.selectSaleList = [];
+                        } else {
+                            if(this.currentMis.salesId&&this.currentMis.salesName&&this.currentMis.label&&this.currentMis.value){
+                                this.selectSaleList = [this.currentMis];
+                            } else {
+                                this.selectSaleList = [];
+                            }
                         }
                     }
-                }
-                this.initChangeDateCalendarFun();
-                this.initTabScroll();
-                this.$store.dispatch('setIsBoss',this.isBoss);
-                this.$store.dispatch('setCurrentMis',this.currentMis);
-                this.$store.dispatch('setSaleList',this.adviserList);
-                this.$store.dispatch('setHotelList',this.hotelList);
-            }).catch(function(ex) {
-                alert('网络异常，请重试');
-                console.log('ajaxGetStatus failed', ex);
-            });
-        },
-        //邀约日历开始时间：本月第一天，跨度：三个月
-        initChangeDateCalendarFun:function(){
-            let firstDate = new Date('2017-07-01');
-            let startDate = formatter(new Date(new Date().setDate(1)),'YYYY-MM-DD');
-            let endDate = new Date(new Date(startDate).setMonth(new Date(startDate).getMonth()+3));
-            this.inviteTimeStartDate = startDate;
-            this.chooseWeekStartDate = firstDate;
-            this.chooseWeekMaxscheduledatenumber = parseInt((endDate.getTime()-firstDate.getTime())/calendarObj.ONE_DAY_TS)-1;
-            this.inviteTimeMaxscheduledatenumber = parseInt((endDate.getTime()-new Date(startDate).getTime())/calendarObj.ONE_DAY_TS)-1;
-        },
-        filterSearchFun:function(){
-            let hotelArry = [];
-            this.selectHotelList.forEach((ele,index)=>{
-                hotelArry.push(ele.shopId);
-            });
-            let saleArry = [];
-            this.selectSaleList.forEach((ele,index)=>{
-                saleArry.push(ele.salesId);
-            });
-            let typeArry = [];
-            this.inviteTypeList.forEach((ele,index)=>{
-                if(ele.active){
-                    typeArry.push(ele.value);
-                }
-            });
-            let params = {
-                fromSchedule:this.filterCheckIn,
-                toSchedule:this.filterCheckOut,
-                shopIds:hotelArry.join(','),
-                salesIds:saleArry.join(','),
-                eventTypes:typeArry.join(',')
-            }
-            let ajaxUrl = mDomain+'/lovelab/salescalendar/eventlist?'+qs.stringify(params);
-            console.log('filter params:',params);
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert(json.msg);
-                        console.log('查询日历列表失败')
-                        return;
-                    }
-                }
-                this.lineTypeList = [];
-                this.inviteDataTotal = json.content.events;
-                let typeList = Object.keys(json.content.personalCount);
-                typeList.forEach((ele,index)=>{
-                    let obj = json.content.personalCount[ele];
-                    obj.type = ele;
-                    this.lineTypeList.push(obj);
+                    this.initChangeDateCalendarFun();
+                    this.initTabScroll();
+                    this.$store.dispatch('setIsBoss',this.isBoss);
+                    this.$store.dispatch('setCurrentMis',this.currentMis);
+                    this.$store.dispatch('setSaleList',this.adviserList);
+                    this.$store.dispatch('setHotelList',this.hotelList);
+                }).catch(function(ex) {
+                    alert('网络异常，请重试');
+                    console.log('ajaxGetStatus failed', ex);
                 });
-                let tempObj = null;
-                this.lineTypeList.forEach((ele,index)=>{
-                    if(ele.type==2){
-                        tempObj = ele;
-                        this.lineTypeList.splice(index,1);
+            },
+            //邀约日历开始时间：本月第一天，跨度：三个月
+            initChangeDateCalendarFun:function(){
+                let firstDate = new Date('2017-07-01');
+                let startDate = formatter(new Date(new Date().setDate(1)),'YYYY-MM-DD');
+                let endDate = new Date(new Date(startDate).setMonth(new Date(startDate).getMonth()+3));
+                this.inviteTimeStartDate = startDate;
+                this.chooseWeekStartDate = firstDate;
+                this.chooseWeekMaxscheduledatenumber = parseInt((endDate.getTime()-firstDate.getTime())/calendarObj.ONE_DAY_TS)-1;
+                this.inviteTimeMaxscheduledatenumber = parseInt((endDate.getTime()-new Date(startDate).getTime())/calendarObj.ONE_DAY_TS)-1;
+            },
+            filterSearchFun:function(){
+                let hotelArry = [];
+                this.selectHotelList.forEach((ele,index)=>{
+                    hotelArry.push(ele.shopId);
+                });
+                let saleArry = [];
+                this.selectSaleList.forEach((ele,index)=>{
+                    saleArry.push(ele.salesId);
+                });
+                let typeArry = [];
+                this.inviteTypeList.forEach((ele,index)=>{
+                    if(ele.active){
+                        typeArry.push(ele.value);
                     }
                 });
-                if(tempObj){
-                    this.lineTypeList.push(tempObj);
+                let params = {
+                    fromSchedule:this.filterCheckIn,
+                    toSchedule:this.filterCheckOut,
+                    shopIds:hotelArry.join(','),
+                    salesIds:saleArry.join(','),
+                    eventTypes:typeArry.join(',')
                 }
-                this.inviteDataDealFun();
-                this.inviteSummaryDealFun(json.content);
-                this.$nextTick(()=>{
-                    this.initInviteStyleFun();
-                });
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.error('ajaxGetIndexResultData failed', ex);
-            });
-        },
-        //将返回的数据处理成能渲染的模式
-        inviteDataDealFun:function(){
-            let arryRange1 = [[],[],[],[],[],[],[]];
-            let arryRange2 = [[],[],[],[],[],[],[]];
-            let arryRange3 = [[],[],[],[],[],[],[]];
-            // data = MockData.inviteDataMock;
-            // data = [];
-            //对数组进行排序
-            this.inviteDataTotal.sort(function(a,b){
-                return new Date(a.eventTime.replace(/-/g,"/")).getTime()-new Date(b.eventTime.replace(/-/g,"/")).getTime();
-            })
-            this.inviteDataTotal.forEach((ele,index)=>{
-                let reg = /^(\d{3})\d{4}(\d{4})$/;
-                let phone = ele.eventInfo.yzsUserPhone;
-                phone = phone?phone.replace(reg, "$1****$2"):"";
-                ele.phoneShow = phone.substring(phone.length-6,phone.length);
-                //对于更改时间后不在日历查询范围的条目不做处理
-                if(new Date(ele.eventTime).getTime()<new Date(this.filterCheckIn).getTime() || new Date(ele.eventTime).getTime()>new Date(this.filterCheckOutText+' 23:59:59').getTime()){
-                    return;
-                }
-                ele.eventTitleShow ='';
-                if(ele.eventType==1 || ele.eventType==3){
-                    ele.eventTitleShow = ele.eventInfo.appointmentCount?ele.eventInfo.appointmentCount+'次邀约':'邀约';
-                } else if(ele.eventType==2) {
-                    ele.eventTitleShow = ele.eventStatus?this.invitePayStatusMap[ele.eventStatus]:'待收款';
-                }
-                ele.hourTime = formatter(new Date(ele.eventTime.replace(/-/g,"/")),'hh:mm');
-                ele.inviteDate = formatter(new Date(ele.eventTime.replace(/-/g,"/")),'YYYY-MM-DD');
-                ele.inviteTime = ele.hourTime;
-                //iphone new Date 支持／ 不支持－ 连接符
-                let timeStr = ele.eventTime.replace(/-/g,"/");
-                let date = new Date(timeStr);
-                let week = date.getDay()==0?7:date.getDay();
-                let hour = date.getHours();
-                arryRange1.forEach((a,aIndex)=>{
-                    if(hour>=8&&hour<12&&week==aIndex+1){
-                        a.push(ele);
-                    }
-                });
-                arryRange2.forEach((a,aIndex)=>{
-                    if(hour>=12&&hour<18&&week==aIndex+1){
-                        a.push(ele);
-                    }
-                });
-                arryRange3.forEach((a,aIndex)=>{
-                    if(hour>=18&&hour<=22&&week==aIndex+1){
-                        a.push(ele);
-                    }
-                });
-            });
-            let allArry = [arryRange1,arryRange2,arryRange3];
-            this.inviteData = allArry;
-        },
-        //处理邀约汇总数据
-        inviteSummaryDealFun:function(data){
-            data.hqCount.forEach((ele,index)=>{
-                if(!ele.salesId){
-                    ele.salesName = '汇总';
-                }
-            });
-            data.hyCount.forEach((ele,index)=>{
-                if(!ele.salesId){
-                    ele.salesName = '汇总';
-                }
-            });
-            this.hqSummaryList = data.hqCount;
-            this.hySummaryList = data.hyCount;
-        },
-        showInviteDetailPopFun:function(invite){
-            this.activeInviteItem = invite;
-            this.showInviteDetailPopStatus = true;
-        },
-        hideInviteDetailPopFun:function(changeTime){
-            this.showInviteDetailPopStatus = false;
-            if(changeTime){
-                this.showInviteCalendarFun();
-            }
-        },
-        showFilterSelectHotelFun:function(){
-            this.showChooseWeekStatus = false;
-            this.showChooseTypeStatus = false;
-            this.showFilterSelectSaleStatus = false;
-            this.showFilterSelectHotelStatus = !this.showFilterSelectHotelStatus;
-        },
-        showFilterSelectSaleFun:function(){
-            this.showChooseWeekStatus = false;
-            this.showChooseTypeStatus = false;
-            this.showFilterSelectHotelStatus = false;
-            this.showFilterSelectSaleStatus = !this.showFilterSelectSaleStatus;
-        },
-        //选中酒店
-        selectHotelFun:function(selectList){
-            if(selectList){
-                this.selectHotelList = selectList;
-            }
-        },
-        //选中顾问
-        selectSaleFun:function(selectList){
-            if(selectList){
-                this.selectSaleList = selectList;
-            }
-        },
-        //隐藏酒店搜索弹窗
-        hideFilterSelectHotelFun:function(){
-            this.showFilterSelectHotelStatus = false;
-        },
-        //隐藏顾问的搜索弹窗
-        hideFilterSelectSaleFun:function(){
-            this.showFilterSelectSaleStatus = false;
-        },
-        showInviteCalendarFun:function(type){
-            if(type){
-                this.changeTimeType = type;
-            }
-            this.showInviteCalendarStatus = true;
-        },
-        hideInviteCalendarFun:function(checkInDate,activeTime){
-            this.showInviteCalendarStatus = false;
-            if(!(checkInDate&&activeTime)){
-                return
-            }
-            let params = {
-                eventId:this.activeInviteItem.eventId,
-                eventTime:formatter(checkInDate, 'YYYY-MM-DD')+' '+activeTime,
-                remark:this.activeInviteItem.remark,
-                status:this.activeInviteItem.eventStatus,
-                operationType:1, //1:修改时间 2:更新状态（取消／到店／变更备注）
-            }
-            let ajaxUrl = mDomain+'/lovelab/salescalendar/updateevent?'+qs.stringify(params);
-            console.log('更改邀约时间:',params);
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json)=>{
-                if(json.code != 200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
-                        alert(json.msg);
-                        console.log('更改邀约时间失败')
-                        return;
-                    }
-                }
-                if(checkInDate){
-                    this.activeInviteItem.inviteDate = formatter(checkInDate, 'YYYY-MM-DD');
-                    this.activeInviteItem.inviteTime = activeTime;
-                    this.activeInviteItem.eventTime=formatter(checkInDate, 'YYYY-MM-DD')+' '+activeTime;
-                    this.filterSearchFun();
-                }
-            this.getInviteNotDealNumFun();
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.error('ajaxGetIndexResultData failed', ex);
-            });
-        },
-        showInviteSummaryFun:function(){
-            this.showInviteSummaryStatus = true;
-            $('body').addClass('no-scroll');
-        },
-        hideInviteSummaryFun:function(){
-            this.showInviteSummaryStatus = false;
-            $('body').removeClass('no-scroll');
-        },
-        showChooseWeekFun:function(){
-            this.showFilterSelectHotelStatus=false;
-            this.showFilterSelectSaleStatus=false;
-            this.showChooseTypeStatus = false;
-            this.showChooseWeekStatus = !this.showChooseWeekStatus;
-            this.$nextTick(function(){
-                calendarObj.toActiveDayIndex(140);
-            });
-        },
-        hideChooseWeekFun:function(){
-            this.showChooseWeekStatus = false;
-        },
-        showChooseTypeFun:function(){
-            this.showFilterSelectHotelStatus=false;
-            this.showFilterSelectSaleStatus=false;
-            this.showChooseWeekStatus = false;
-            this.showChooseTypeStatus = !this.showChooseTypeStatus;
-        },
-        hideChooseTypeFun:function(){
-            this.showChooseTypeStatus = false;
-        },
-        chooseFilterTypeFun:function(item){
-            item.active = !item.active;
-        },
-        changeFilterDate:function(checkInDate){
-            if(checkInDate){
-                this.filterCheckIn = checkInDate;
-            }
-        },
-        showSureCancelFun:function(){
-            this.showSureStatus = true;
-        },
-        hideSureCancelFun:function(){
-            this.showSureStatus = false;
-        },
-        sureCancelVisitShopFun:function(){
-            this.showSureStatus = false;
-        },
-        //获取待处理日历数目
-        getInviteNotDealNumFun:function(){
-            let ajaxUrl = mDomain+'/lovelab/salescalendar/reddot';
-            fetchJsonp(ajaxUrl, {
-                jsonpCallback: 'jsonp'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then((json) =>{
-                if(json.code!=200){
-                    if(json.code==600){
-                        location.href= eDomain;
-                    } else {
+                let ajaxUrl = mDomain+'/lovelab/salescalendar/eventlist?'+qs.stringify(params);
+                console.log('filter params:',params);
+                fetchJsonp(ajaxUrl, {
+                    jsonpCallback: 'jsonp'
+                })
+                .then(function(response) {
+                    return response.json();
+                }).then((json)=>{
+                    if(json.code != 200){
                         console.error(json.msg);
-                        alert('网络错误，请重试');
+                        alert('请求失败：'+json.msg);
                         return
                     }
+                    this.filterTopNumber = 0;
+                    this.lineTypeList = [];
+                    if(!json.content){
+                        json.content = {
+                            events:[],
+                            personalCount:[]
+                        }
+                    }
+                    this.inviteDataTotal = json.content&&json.content.events?json.content.events:[];
+                    json.content.personalCount.forEach((ele,index)=>{
+                        ele.type=0;
+                        if(ele.eventType==1){
+                            if(ele.businessLineType == 0){
+                                if(ele.shopAppointment==1){
+                                    ele.type = 4;   //门店
+                                } else {
+                                    ele.type = 1;   //婚宴
+                                }
+                            } else if(ele.businessLineType == 1){
+                                ele.type = 3;   //婚庆
+                            } else if(ele.businessLineType == 2){
+                                ele.type = 5;   //礼服
+                            }
+                        } else if(ele.eventType==2){
+                            if(ele.businessLineType == 0){
+                                ele.type = 2;  //收款
+                            }
+                        }
+                    });
+                    let tempObj = null;
+                    json.content.personalCount.forEach((ele,index)=>{
+                        if(ele.type==2){
+                            tempObj = CommonFun.deepClone(ele);
+                            json.content.personalCount.splice(index,1);
+                        }
+                    });
+                    if(tempObj){
+                        json.content.personalCount.push(tempObj);
+                    }
+                    this.lineTypeList = json.content.personalCount;
+                    this.inviteDataDealFun();
+                    this.inviteSummaryDealFun(json.content);
+                    this.$nextTick(()=>{
+                        this.initInviteStyleFun();
+                    });
+                }).catch(function(ex) {
+                    alert('网络错误，请重试');
+                    console.error('ajaxGetIndexResultData failed', ex);
+                });
+            },
+            //将返回的数据处理成能渲染的模式
+            inviteDataDealFun:function(){
+                let arryRange1 = [[],[],[],[],[],[],[]];
+                let arryRange2 = [[],[],[],[],[],[],[]];
+                let arryRange3 = [[],[],[],[],[],[],[]];
+                // data = MockData.inviteDataMock;
+                // data = [];
+                //对数组进行排序
+
+                this.inviteDataTotal.sort(function(a,b){
+                    return new Date(a.eventTime.replace(/-/g,"/")).getTime()-new Date(b.eventTime.replace(/-/g,"/")).getTime();
+                })
+                this.inviteDataTotal.forEach((ele,index)=>{
+                    let reg = /^(\d{3})\d{4}(\d{4})$/;
+                    let phone = ele.eventInfo.yzsUserPhone;
+                    phone = phone?phone.replace(reg, "$1****$2"):"";
+                    ele.phoneShow = phone.substring(phone.length-6,phone.length);
+                    //对于更改时间后不在日历查询范围的条目不做处理
+                    if(new Date(ele.eventTime).getTime()<new Date(this.filterCheckIn).getTime() || new Date(ele.eventTime).getTime()>new Date(this.filterCheckOutText+' 23:59:59').getTime()){
+                        return;
+                    }
+                    ele.eventTitleShow ='';
+                    ele.type = 0;
+                    if(ele.eventType==1){
+                        if(ele.businessLineType == 0){
+                            if(ele.shopAppointment==1){
+                                ele.type = 4;   //门店
+                            } else {
+                                ele.type = 1;   //婚宴
+                            }
+                        } else if(ele.businessLineType == 1){
+                            ele.type = 3;   //婚庆
+                        } else if(ele.businessLineType == 2){
+                            ele.type = 5;   //礼服
+                        }
+                    } else if(ele.eventType==2){
+                        if(ele.businessLineType == 0){
+                            ele.type = 2;  //收款
+                        }
+                    }
+                    //ele.eventStatus：0=无状态 101＝已到店 102＝已取消 201＝已收款
+                    if(ele.type==1 || ele.type==3 ||ele.type==4 ||ele.type==5){
+                        ele.eventTitleShow = ele.eventInfo.appointmentCount?ele.eventInfo.appointmentCount+'次邀约':'邀约';
+                    } else if(ele.type==2) {
+                        ele.eventTitleShow = ele.eventStatus?this.invitePayStatusMap[ele.eventStatus]:'待收款';
+                    }
+                    ele.hourTime = formatter(new Date(ele.eventTime.replace(/-/g,"/")),'hh:mm');
+                    ele.inviteDate = formatter(new Date(ele.eventTime.replace(/-/g,"/")),'YYYY-MM-DD');
+                    ele.inviteTime = ele.hourTime;
+                    //iphone new Date 支持／ 不支持－ 连接符
+                    let timeStr = ele.eventTime.replace(/-/g,"/");
+                    let date = new Date(timeStr);
+                    let week = date.getDay()==0?7:date.getDay();
+                    let hour = date.getHours();
+                    arryRange1.forEach((a,aIndex)=>{
+                        if(hour>=8&&hour<12&&week==aIndex+1){
+                            a.push(ele);
+                        }
+                    });
+                    arryRange2.forEach((a,aIndex)=>{
+                        if(hour>=12&&hour<18&&week==aIndex+1){
+                            a.push(ele);
+                        }
+                    });
+                    arryRange3.forEach((a,aIndex)=>{
+                        if(hour>=18&&hour<=22&&week==aIndex+1){
+                            a.push(ele);
+                        }
+                    });
+                });
+                let allArry = [arryRange1,arryRange2,arryRange3];
+                this.inviteData = allArry;
+            },
+            //处理邀约汇总数据
+            inviteSummaryDealFun:function(data){
+                if(data.totalCount){
+                    data.totalCount.forEach((item,index)=>{
+                        item.counts.forEach((ele,index)=>{
+                            if(!ele.salesName){
+                                ele.salesName = '汇总';
+                            }
+                        });
+                    });
                 }
-                this.notDealNum = json.content.count;
-                console.log(json.content.count,'-----');
-            }).catch(function(ex) {
-                alert('网络错误，请重试');
-                console.error('ajaxGetIndexResultData failed', ex);
-            });
-        },
-        touchMoveFun:function(event){
-            event.preventDefault();
-            event.stopPropagation();
-        },
-        initTabScroll:function(){
-            let self = this;
-            window.onscroll=function(){
-                var winScrollTop = window.scrollY;
-                if(winScrollTop > self.filterTopNumber){
-                    self.filterTopStatus = true;
-                }else{
-                    self.filterTopStatus = false;
+                this.summaryList = data.totalCount?data.totalCount:[];
+            },
+            showInviteDetailPopFun:function(invite){
+                this.activeInviteItem = invite;
+                this.showInviteDetailPopStatus = true;
+            },
+            hideInviteDetailPopFun:function(changeTime){
+                this.showInviteDetailPopStatus = false;
+                if(changeTime){
+                    this.showInviteCalendarFun();
                 }
-                };
-        },
-        initInviteStyleFun:function(){
-            if(document.querySelector(".invite-filter-div")&&document.querySelector(".invite-filter-div").offsetTop!=0){
-                this.filterTopNumber = document.querySelector(".invite-filter-div").offsetTop;
+            },
+            showFilterSelectHotelFun:function(){
+                this.showChooseWeekStatus = false;
+                this.showChooseTypeStatus = false;
+                this.showFilterSelectSaleStatus = false;
+                this.showFilterSelectHotelStatus = !this.showFilterSelectHotelStatus;
+            },
+            showFilterSelectSaleFun:function(){
+                this.showChooseWeekStatus = false;
+                this.showChooseTypeStatus = false;
+                this.showFilterSelectHotelStatus = false;
+                this.showFilterSelectSaleStatus = !this.showFilterSelectSaleStatus;
+            },
+            //选中酒店
+            selectHotelFun:function(selectList){
+                if(selectList){
+                    this.selectHotelList = selectList;
+                }
+            },
+            //选中顾问
+            selectSaleFun:function(selectList){
+                if(selectList){
+                    this.selectSaleList = selectList;
+                }
+            },
+            //隐藏酒店搜索弹窗
+            hideFilterSelectHotelFun:function(){
+                this.showFilterSelectHotelStatus = false;
+                this.$nextTick(()=>{
+                    this.resetFilterTopFun();
+                });
+            },
+            //隐藏顾问的搜索弹窗
+            hideFilterSelectSaleFun:function(){
+                this.showFilterSelectSaleStatus = false;
+                this.$nextTick(()=>{
+                    this.resetFilterTopFun();
+                });
+            },
+            //重新计算筛选条件距离顶部的距离
+            resetFilterTopFun:function(){
+                setTimeout(()=>{
+                    if(document.querySelector(".invite-filter-div").offsetTop!=0){
+                        this.filterTopNumber = document.querySelector(".invite-filter-div").offsetTop;
+                    }
+                },300);
+            },
+            showInviteCalendarFun:function(type){
+                if(type){
+                    this.changeTimeType = type;
+                }
+                this.showInviteCalendarStatus = true;
+            },
+            hideInviteCalendarFun:function(checkInDate,activeTime){
+                this.showInviteCalendarStatus = false;
+                if(!(checkInDate&&activeTime)){
+                    return
+                }
+                let params = {
+                    eventId:this.activeInviteItem.eventId,
+                    eventTime:formatter(checkInDate, 'YYYY-MM-DD')+' '+activeTime,
+                    remark:this.activeInviteItem.remark,
+                    status:this.activeInviteItem.eventStatus,
+                    operationType:1, //1:修改时间 2:更新状态（取消／到店／变更备注）
+                }
+                let ajaxUrl = mDomain+'/lovelab/salescalendar/updateevent?'+qs.stringify(params);
+                console.log('更改邀约时间:',params);
+                fetchJsonp(ajaxUrl, {
+                    jsonpCallback: 'jsonp'
+                })
+                .then(function(response) {
+                    return response.json();
+                }).then((json)=>{
+                    if(json.code != 200){
+                        console.error(json.msg);
+                            alert('请求失败：'+json.msg);
+                            return
+                    }
+                    if(checkInDate){
+                        this.activeInviteItem.inviteDate = formatter(checkInDate, 'YYYY-MM-DD');
+                        this.activeInviteItem.inviteTime = activeTime;
+                        this.activeInviteItem.eventTime=formatter(checkInDate, 'YYYY-MM-DD')+' '+activeTime;
+                        this.filterSearchFun();
+                    }
+                    this.getInviteNotDealNumFun();
+                }).catch(function(ex) {
+                    alert('网络错误，请重试');
+                    console.error('ajaxGetIndexResultData failed', ex);
+                });
+            },
+            showInviteSummaryFun:function(){
+                this.showInviteSummaryStatus = true;
+                $('body').addClass('no-scroll');
+            },
+            hideInviteSummaryFun:function(){
+                this.showInviteSummaryStatus = false;
+                $('body').removeClass('no-scroll');
+            },
+            showChooseWeekFun:function(){
+                this.showFilterSelectHotelStatus=false;
+                this.showFilterSelectSaleStatus=false;
+                this.showChooseTypeStatus = false;
+                this.showChooseWeekStatus = !this.showChooseWeekStatus;
+                this.$nextTick(function(){
+                    calendarObj.toActiveDayIndex(140);
+                });
+            },
+            hideChooseWeekFun:function(){
+                this.showChooseWeekStatus = false;
+                this.$nextTick(()=>{
+                    this.resetFilterTopFun();
+                });
+            },
+            showChooseTypeFun:function(){
+                this.showFilterSelectHotelStatus=false;
+                this.showFilterSelectSaleStatus=false;
+                this.showChooseWeekStatus = false;
+                this.showChooseTypeStatus = !this.showChooseTypeStatus;
+            },
+            hideChooseTypeFun:function(){
+                this.showChooseTypeStatus = false;
+                this.$nextTick(()=>{
+                    this.resetFilterTopFun();
+                });
+            },
+            chooseFilterTypeFun:function(item){
+                item.active = !item.active;
+            },
+            changeFilterDate:function(checkInDate){
+                if(checkInDate){
+                    this.filterCheckIn = checkInDate;
+                }
+            },
+            showSureCancelFun:function(){
+                this.showSureStatus = true;
+            },
+            hideSureCancelFun:function(){
+                this.showSureStatus = false;
+            },
+            sureCancelVisitShopFun:function(){
+                this.showSureStatus = false;
+            },
+            //获取待处理日历数目
+            getInviteNotDealNumFun:function(){
+                let ajaxUrl = mDomain+'/lovelab/salescalendar/reddot';
+                fetchJsonp(ajaxUrl, {
+                    jsonpCallback: 'jsonp'
+                })
+                .then(function(response) {
+                    return response.json();
+                }).then((json) =>{
+                    if(json.code!=200){
+                        console.error(json.msg);
+                            alert('请求失败：'+json.msg);
+                            return
+                    }
+                    this.notDealNum = json.content.count;
+                    if(this.notDealNum){
+                        this.showTipsStatus = true;
+                    } else {
+                        this.showTipsStatus = false;
+                    }
+                }).catch(function(ex) {
+                    alert('网络错误，请重试');
+                    console.error('ajaxGetIndexResultData failed', ex);
+                });
+            },
+            touchMoveFun:function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            },
+            initTabScroll:function(){
+                let self = this;
+                window.onscroll=function(){
+                    var winScrollTop = window.scrollY;
+                    if(winScrollTop > self.filterTopNumber){
+                        self.filterTopStatus = true;
+                    }else{
+                        self.filterTopStatus = false;
+                    }
+                  };
+            },
+            initInviteStyleFun:function(){
+                let firstHeight = $('#0').height()-1;
+                let secondHeight = $('#1').height()-1;
+                let thirdHeight = $('#2').height()-1;
+                $('.first-range').css('height',firstHeight+'px');
+                $('.second-range').css('height',secondHeight+'px');
+                $('.third-range').css('height',thirdHeight+'px');
+                let firstHeightTop = firstHeight/2-35>0?firstHeight/2-35:0;
+                let secondHeightTop = secondHeight/2-35>0?secondHeight/2-35:0;
+                let thirdHeightTop = thirdHeight/2-35>0?thirdHeight/2-35:0;
+                $('.first-range span').css('top',firstHeightTop+'px');
+                $('.second-range span').css('top',secondHeightTop+'px');
+                $('.third-range span').css('top',thirdHeightTop+'px');
+                //打开页面时滚动至今天所在的星期数，如果是周末的话滚动至周五
+                let weekDay=new Date().getDay()==0 || new Date().getDay()== 6 ?5:new Date().getDay();
+                let todayClassStr = '.date-item.'+this.weekTextMap[weekDay];
+                let leftValue = $(todayClassStr).offset().left-50;
+                if(leftValue>10){
+                    $('.invite-detail-table-range-list').scrollLeft(leftValue);
+                }
+                this.$nextTick(()=>{
+                    let winHeight = window.screen.height;
+                    let thirdRangeTop = document.querySelector(".third-range").offsetTop;
+                    if(thirdRangeTop+thirdHeight+53<winHeight){
+                        $('.third-range').css('height','250px !important');
+                        $('#2').find('.list-data-div').css('height','250px !important');
+                    }
+                    this.resetFilterTopFun();
+                });
+            },
+            hideTipsFun:function(){
+                this.showTipsStatus = false;
+                this.$nextTick(()=>{
+                    this.resetFilterTopFun();
+                });
+            },
+            chooseTypeDetailFun:function(type){
+                this.inviteTypeList.forEach((ele,index)=>{
+                    ele.active = false;
+                    if(ele.type == type){
+                        ele.active = true;
+                    }
+                });
             }
-            let firstHeight = $('#0').height()-1;
-            let secondHeight = $('#1').height()-1;
-            let thirdHeight = $('#2').height()-1;
-            $('.first-range').css('height',firstHeight+'px');
-            $('.second-range').css('height',secondHeight+'px');
-            $('.third-range').css('height',thirdHeight+'px');
-            let firstHeightTop = firstHeight/2-35>0?firstHeight/2-35:0;
-            let secondHeightTop = secondHeight/2-35>0?secondHeight/2-35:0;
-            let thirdHeightTop = thirdHeight/2-35>0?thirdHeight/2-35:0;
-            $('.first-range span').css('top',firstHeightTop+'px');
-            $('.second-range span').css('top',secondHeightTop+'px');
-            $('.third-range span').css('top',thirdHeightTop+'px');
-            //打开页面时滚动至今天所在的星期数，如果是周末的话滚动至周五
-            let weekDay=new Date().getDay()==0 || new Date().getDay()== 6 ?5:new Date().getDay();
-            let todayClassStr = '.date-item.'+this.weekTextMap[weekDay];
-            let leftValue = 0;
-            if($(todayClassStr)&&$(todayClassStr).offset()){
-                leftValue = $(todayClassStr).offset().left-50;
-            }
-            if(leftValue>10){
-                $('.invite-detail-table-range-list').scrollLeft(leftValue);
-            }
-            this.$nextTick(()=>{
-                let winHeight = window.screen.height;
-                let thirdRangeTop = 0;
-                if(document.querySelector(".third-range")&&document.querySelector(".third-range").offsetTop){
-                    thirdRangeTop = document.querySelector(".third-range").offsetTop;
-                }
-                if(thirdRangeTop+thirdHeight+53<winHeight){
-                    $('.third-range').css('height','250px !important');
-                    $('#2').find('.list-data-div').css('height','250px !important');
-                }
-            });
-        },
+        }
     }
-}
 </script>
 
 <style lang="less">
@@ -748,10 +835,6 @@ export default {
         font-size: 1.2rem;
         background: #f0f0f0f;
         padding-bottom: 6.6rem;
-        p{
-            margin-top:0;
-            margin-bottom:0;
-        }
     }
     .flex-parent{
         display:flex;
@@ -787,8 +870,14 @@ export default {
                 &.banquet{
                     background: #FFF3F7;
                 }
+                &.shop{
+                    background: #FFF3E6;
+                }
                 &.wed{
                     background: #E9F7FF;
+                }
+                &.dress{
+                    background: #F6F6FF;
                 }
                 &.pay{
                     background: #EBFFF6;
@@ -796,6 +885,7 @@ export default {
             }
             .tag-content{
                 padding: 1rem;
+                height: 7.1rem;
                 .number-item{
                     margin-bottom: 1rem;
                     &:last-child{
@@ -844,6 +934,19 @@ export default {
                 color: #333333;
                 line-height: 1.8rem;
                 height: 1.8rem;
+            }
+        }
+    }
+    .more-line-div{
+        overflow-y: hidden;
+        border-spacing: 1.5rem;
+        padding: 0;
+        -webkit-overflow-scrolling: touch;
+        .summary-tag{
+            display: table-cell;
+            position: relative;
+            .tag-title{
+                width: 10rem;
             }
         }
     }
@@ -983,7 +1086,6 @@ export default {
                     font-size: 1.1rem;
                     p{
                         margin-left: 1rem;
-                        margin-top:0;
                     }
                     position: absolute;
                     left:.3rem;
@@ -1033,6 +1135,30 @@ export default {
                     }
                     .item-date-div{
                         background-color: #E9F7FF;
+                    }
+                }
+                &.shop-type{
+                    .border-left-div-3{
+                        background: #FFB866;
+                        border-bottom: solid .1rem #FFB866;
+                    }
+                    .item-date-div{
+                        background-color: #FFF3E6;
+                    }
+                    .status-div.visit-shop{
+                        background: #FFB866;
+                    }
+                }
+                &.dress-type{
+                    .border-left-div-3{
+                        background: #827FFF;
+                        border-bottom: solid .1rem #827FFF;
+                    }
+                    .item-date-div{
+                        background-color: #F6F6FF;
+                    }
+                    .status-div.visit-shop{
+                        background: #827FFF;
                     }
                 }
                 .status-div{
@@ -1646,6 +1772,34 @@ export default {
         padding-top: 4rem;
         .left-time-range-div{
             padding-top: 9rem;
+        }
+    }
+    .invite-user-name{
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 1rem;
+        margin-bottom: 0 !important;
+        max-width: 5.5rem !important;
+    }
+    .tips-info-div{
+        position: relative;
+        line-height: 3.8rem;
+        background: #FFF3DB;
+        font-size: 1.4rem;
+        font-family: PingFangSC-Regular;
+        color: #E58F1F;
+        .borderline(#F3D08C,bottom);
+        .tips-span{
+            margin-left: 1.5rem;
+        }
+        .close-tips{
+            position: absolute;
+            width: 1.3rem;
+            height: 1.3rem;
+            background-repeat: no-repeat;
+            background-size: cover;
+            right: 1.5rem;
+            top: 1.2rem;
         }
     }
 </style>

@@ -1,12 +1,12 @@
 <template>
-    <div style="position:relative;width:100%;height:400px;text-align:center;">
+    <div style="position:absolute;width:100%;height:400px;text-align:center;top: 0;background:#fff">
         <video controls="controls" autoplay="autoplay" style="width:100%;height:100%;">
             <source src="http://www.w3school.com.cn/i/movie.ogg" type="video/ogg" />
             <source src="http://www.w3school.com.cn/i/movie.mp4" type="video/mp4" /> 
             Your browser does not support the video tag.
         </video>
 
-        <canvas id="canvas" width="100%" height="400" style="position:absolute;top:0;left:0;">
+        <canvas id="canvas" style="position:absolute;top:0;left:0;right:0;bottom:0;width: 100%;height: 100%;">
             您的浏览器不支持canvas标签。
         </canvas>
     </div>

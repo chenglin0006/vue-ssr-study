@@ -16,7 +16,6 @@ import AppHotelDetailPicIndex from '../hotelIndex/AppHotelDetailPicIndex.vue'
 import AppAnimateIndex1 from '../animateIndex/invitation_1/app.vue'
 import AppAnimateIndex2 from '../animateIndex/invitation_2/app.vue'
 import AppAnimateBarrage from '../animateIndex/barrage/app.vue'
-import AppAnimateIndex from '../animateIndex/AppAnimateIndex.vue'
 // 使用vue-router
 Vue.use(VueRouter);
 
