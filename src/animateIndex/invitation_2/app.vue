@@ -1,5 +1,5 @@
 <template>
-    <div class="main" >
+    <div class="main invite-2" >
         <template>
             <div @touchstart="pageTouchStart"
                  @touchmove="pageTouchMove"

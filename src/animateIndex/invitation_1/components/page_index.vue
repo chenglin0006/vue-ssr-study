@@ -23,7 +23,6 @@
             <!-- 中间内容 -->
             <div class="inner">
                 <div class="photo ani-photo" style="background-image: url('//www.dpfile.com/app/app-wed-wedding-invitation/static/invi_4.jpg?356d7836818d5b8b477aa845f7e3c85c'); transform: scale(1);">
-                    <cust-edit-btn-cpt name="0.p0" type="img"></cust-edit-btn-cpt>
                 </div>
                 <div class="edit-box">
                     <div class="name-wrap">

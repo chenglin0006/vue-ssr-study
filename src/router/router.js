@@ -14,7 +14,8 @@ import AppHotelDetailOperateIndex from '../hotelIndex/AppHotelDetailOperateIndex
 import AppHotelDetailHallIndex from '../hotelIndex/AppHotelDetailHallIndex.vue'
 import AppHotelDetailPicIndex from '../hotelIndex/AppHotelDetailPicIndex.vue'
 import AppAnimateIndex1 from '../animateIndex/invitation_1/app.vue'
-import AppAnimateIndex2 from '../animateIndex/invitation_9/app.vue'
+import AppAnimateIndex2 from '../animateIndex/invitation_2/app.vue'
+import AppAnimateBarrage from '../animateIndex/barrage/app.vue'
 import AppAnimateIndex from '../animateIndex/AppAnimateIndex.vue'
 // 使用vue-router
 Vue.use(VueRouter);
@@ -47,7 +48,8 @@ const routers = [{
     meta:{title:"动画",showBottom:true,tab:'animate'},
     children:[
         {path:'index1',name:'index1',component:AppAnimateIndex1,meta:{title:'动画1',showBottom:false}},
-        {path:'index2',name:'index2',component:AppAnimateIndex2,meta:{title:'动画2',showBottom:false}}
+        {path:'index2',name:'index2',component:AppAnimateIndex2,meta:{title:'动画2',showBottom:false}},
+        {path:'barrage',name:'barrage',component:AppAnimateBarrage,meta:{title:'弹幕效果',showBottom:false}}
     ]
 }, {
     path: '/invite',
