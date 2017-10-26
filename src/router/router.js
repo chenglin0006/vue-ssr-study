@@ -3,7 +3,6 @@
 // Vue和Vue-router
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AppHotelDetail from '../hotelIndex/AppHotelDetail.vue';
 import AppHotelDetailIndex from '../hotelIndex/AppHotelDetailIndex.vue';
 import AppHotelDetailDiscountIndex from '../hotelIndex/AppHotelDetailDiscountIndex.vue'
 import AppHotelDetailRecommandIndex from '../hotelIndex/AppHotelDetailRecommandIndex.vue'
