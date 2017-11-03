@@ -27,18 +27,8 @@ const Animate =() => import('../animateIndex/AppAnimateIndex.vue')
 const routers = [{
     path: '/',
     name: 'corepage',
-    meta: {title: "主页面",showBottom:true,tab:'invite'},
+    meta: {title: "首页",showBottom:true,tab:'own'},
     component: require('../container/corepage.vue')
-}, {
-    path: '/routerpage1',
-    name: 'routerpage1',
-    meta: {title: "路由页面1"},
-    component: Invite
-}, {
-    path: '/routerpage2',
-    name: 'routerpage2',
-    meta: {title: "路由页面2"},
-    component: require('../container/routerpage2.vue')
 }, {
     path: '/animate',
     name: 'animate',

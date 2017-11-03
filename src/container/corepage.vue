@@ -3,7 +3,7 @@
     
     <page-title title="主页面"</page-title>
     <div>
-        测试数据：
+        测试首屏数据：
         <p>title:{{initData.title}}</p>
         <p>name:{{initData.name}}</p>
         <p v-if="initData.listLength">数组长度：{{initData.listLength}}</p>

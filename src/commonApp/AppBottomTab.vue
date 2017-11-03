@@ -3,7 +3,7 @@
 -->
 <template>
 	<section class="love-lab-bottom-tab-div flex-parent" :class="{'is-android':isAndroid}" v-show="showBottom">
-        <div class="tab-title flex-child customer" :class="{'active':activeTab=='customer'}" @click="toIndex(animateLink,'customer')">
+        <div class="tab-title flex-child customer" :class="{'active':activeTab=='animate'}" @click="toIndex(animateLink,'animate')">
             <div class="img-div"></div>
             <a>动画</a>
         </div>
@@ -59,7 +59,7 @@
             this.animateLink = '/animate';
             this.calendarLink = '/invite';
             this.hotelLink = '/hotel';
-            this.ownLink = '/own';
+            this.ownLink = '/';
             // this.getInviteNotDealNumFun();
         },
         methods:{
