@@ -1,7 +1,5 @@
 <template>
 <div class="corepage">
-    
-    <page-title title="主页面"</page-title>
     <div>
         测试首屏数据：
         <p>title:{{initData.title}}</p>

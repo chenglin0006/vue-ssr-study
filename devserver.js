@@ -57,7 +57,7 @@ router.get("*", function*(next) {
                             <meta http-equiv="X-UA-Compatible" content="IE=edge">
                             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
                         
-                            <title>vue ssr step3</title>
+                            <title>vue study pro</title>
                             <meta name="description" content=""/>
                             <meta name="format-detection" content="telephone=no">
                             <meta name="format-detection" content="email=no"/>

@@ -145,7 +145,7 @@ body{
         z-index:10000;
         padding-bottom: 1rem;
         top: 4rem;
-        height: 41.5rem;
+        height: 42.5rem;
     }
     .v-calendar--date-item{
         div{
