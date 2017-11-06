@@ -12,6 +12,7 @@
 <script>
 import PageTitle from '../components/page-title.vue'
 import test from './test.js'
+import { mapGetters } from 'vuex';
 export default {
     asyncData ({ store, route}) {
         return store.dispatch('setInitData', { title:'1233',name:'456',listLength:'12' });
@@ -33,9 +34,9 @@ export default {
     methods: {
     },
     computed: {
-        initData () {
-            return this.$store.state.initData
-        }
+        ...mapGetters({
+            initData:'getInitData',
+        })
     }
 }
 </script>

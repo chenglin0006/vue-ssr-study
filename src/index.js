@@ -5,6 +5,13 @@ import Vue from "vue";
 // 引入store和router的工厂函数
 import {createStore} from './store/store.js'
 import {createRouter} from './router/router.js'
+import axios from 'axios';
+var instance = axios.create({
+  baseURL: 'https://e.51ping.com/lovelab',
+  timeout: 1000,
+  headers: {'X-Custom-Header': 'foobar'}
+});
+Vue.prototype.$axios = instance;
 
 // 引入同步路由状态到store库
 import {sync} from 'vuex-router-sync'

@@ -5,6 +5,9 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as type from './type';
 import $ from 'jquery';
+import axios from 'axios';
+axios.defaults.baseURL = 'https://m.dianping.com/wedding/ajax/market/yzs';
+
 require('isomorphic-fetch');
 // 使用vuex
 Vue.use(Vuex);
@@ -75,18 +78,27 @@ let actions = {
         });
     },
     setInitData({commit},obj){
-        return fetch('https://m.dianping.com/wedding/ajax/market/yzs/yzsvrhotellist.wapi?firstLetter=&regionIds=&minTable=0&maxTable=0&minPrice=0&maxPrice=0')
-        .then((response)=>{
-            if (response.status >= 400) {
-                throw new Error("Bad response from server");
-            }
-            return response.json();
-        })
-        .then((stories)=>{
-            obj.listLength=stories.content.length;
+        return axios.get('/yzsvrhotellist.wapi?firstLetter=&regionIds=&minTable=0&maxTable=0&minPrice=0&maxPrice=0').then(response => {
+            // success callback
+            obj.listLength=response.data.content.length;
             commit('setInitData',obj);
             console.log(obj);
-        });
+        }, response => {
+            // error callback
+            console.log(response,'－－－－=');
+        })
+        // return fetch('https://m.dianping.com/wedding/ajax/market/yzs/yzsvrhotellist.wapi?firstLetter=&regionIds=&minTable=0&maxTable=0&minPrice=0&maxPrice=0')
+        // .then((response)=>{
+        //     if (response.status >= 400) {
+        //         throw new Error("Bad response from server");
+        //     }
+        //     return response.json();
+        // })
+        // .then((stories)=>{
+        //     obj.listLength=stories.content.length;
+        //     commit('setInitData',obj);
+        //     console.log(obj,axios);
+        // });
     },
     setBottomStatus({commit},boolFlag){
         commit(type.SHOW_BOTTOM_STATUS,boolFlag);
@@ -148,7 +160,10 @@ export function createStore() {
     let storeObj = {
         state: {
             ajaxData: null,
-            initData:{},
+            initData:{
+                title:'title',
+                name:'name'
+            },
             showBottomStatus:true,
             userList:[],
             activeTab:'',
@@ -170,7 +185,7 @@ export function createStore() {
             ajaxData: state => {
                 return state.ajaxData;
             },
-            initData: state => {
+            getInitData: state => {
                 return state.initData
             },
             getShowBottomStatus:state=>state.showBottomStatus,
